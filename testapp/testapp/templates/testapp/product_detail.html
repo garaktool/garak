@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <html class="mdl-js">
 <head>
 <title>
@@ -9,10 +11,12 @@
 <link rel="stylesheet" href="./static/garak.css">
 <link rel="stylesheet" href="./static/date/css/bootstrap-datepicker3.css">
 <link rel="stylesheet" href="./static/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'testapp/style.css' %}" />
 <script src="./static/jquery-1.11.3.min.js"></script>    
 <script src="./static/material.js"></script>
 <script src="./static/garak.js"></script>
 <script src="./static/jquery-ui.js"></script>
+
 
 <script>
   $(function() {
