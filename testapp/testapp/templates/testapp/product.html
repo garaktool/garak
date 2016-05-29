@@ -1,0 +1,10 @@
+<h1>{{ product_info.name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<li><a href="{% url 'product' product_info.id %}">{{ product_info.question_text }}</a></li>
+<input type="submit" value="ADD" />
+</form>
+
+
+

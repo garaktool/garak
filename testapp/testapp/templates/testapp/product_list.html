@@ -1,0 +1,8 @@
+<h1>Products</h1>
+<ul>
+{% for goods in latest_product_list %}
+    <a href="{% url 'product_detail' goods.id %}"><li>{{ goods.pub_date|date }} - {{ goods.name }}</li></a>
+{% empty %}
+    <li>No product yet.</li>
+{% endfor %}
+</ul>
