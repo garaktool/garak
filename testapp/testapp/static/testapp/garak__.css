@@ -1,0 +1,204 @@
+/** card **/
+.page-content {
+    position : relative;
+}
+
+.garak_card {
+    min-height : 0px;
+}
+
+.board {
+    position : absolute;
+    right : 20px;
+    top : 20px;;
+}
+
+.left_board {
+    float : left;
+}
+
+.right_board {
+    float : right;
+    margin-left : 20px;
+}
+
+.demo-card-wide.mdl-card {
+  width: 180px;
+}
+.demo-card-wide > .mdl-card__title {
+  color: #fff;
+    background-color : #d0021b;
+}
+.demo-card-wide > .mdl-card__menu {
+  color: #fff;
+}
+
+/** global **/
+.disabled {
+    display : none;
+}
+
+.current_tool {
+    width : 105px;
+    height : 50px;
+}
+
+.current_tool span {
+    height : 50px;
+    line-height : 50px;
+    text-align : center;
+    background-color : #5AAFEE;
+    font-size : 15px;
+}
+
+.garak_sales {
+
+}
+
+.garak_sales .mdl-layout__drawer-button {
+    background-color : transparent;
+    margin : 0 !important;
+    height : 50px;
+    width : 50px;
+}
+
+.garak_sales .mdl-layout__drawer-button i {
+    line-height : 50px;
+}
+
+.garak_sales .mdl-layout__header-row {
+    padding : 0 40px 0 50px;
+}
+
+.garak_sales .garak_sub_menu {
+    background-color : #3D4A54;
+}
+
+.garak_sub_menu {
+    width : 100% !important;
+    padding : 0 !important;
+}
+
+.mdl-layout {
+    max-width : 960px;
+    margin : 20px auto;
+    background-color : #35414A;
+}
+
+.mdl-layout .mdl-layout__header-row {
+    height : 50px;
+    background-color : #2D3840;
+}
+
+.mdl-layout .mdl-layout__tab {
+    height : 30px;
+    line-height : 30px;
+}
+
+.mdl-layout .mdl-layout__tab-bar-button {
+    background-color : #3D4A54;
+}
+
+.mdl-layout .mdl-layout__tab-bar-container {
+    height : 30px;
+}
+
+.page-content {
+	padding : 15px;
+}
+
+.garak_sub_title {
+	color : #F5A623;
+	font-size : 20px;
+	line-height : 28px;
+}
+
+.garak_sorting {
+	color : #9B9B9B;
+	font-size : 10px;
+}
+
+.garak_calendar {
+	margin-bottom : 20px;
+}
+
+.garak_calendar input {
+	border-radius : 5px;
+	border : 1px solid #ccc;
+	height : 30px;
+	line-height : 30px;
+	margin : 0 0 4px 0;
+}
+
+.garak_calendar i {
+    color : #9b9b9b;
+}
+
+.garak_calendar_start {
+	color : #fff;
+}
+
+.garak_btn {
+	background-color : #6D7A83;
+}
+
+.garak_table {
+	border : 0 !important;
+	border-radius : 15px;
+    width : 910px;
+    max-width : 910px;
+    table-layout: fixed;
+    margin : 0 auto 20px auto;
+}
+
+.garak_table td {
+    overflow :hidden;
+}
+
+.garak_table th {
+	background-color : #000;
+	color : #fff;
+}
+
+.garak_table_title {
+	width : 910px;
+	height : 40px;
+	line-height: 40px;
+	background-color : #5AAFEE;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    margin : 0 auto;
+    color : white;
+}
+
+.garak_table_input input {
+    padding : 0 !important;
+    font-size : 13px;
+}
+
+.garak_table_input label {
+    font-size : 12px;
+    top : 11px;
+    left : 15px;
+    width : 40px !important;
+}
+
+
+
+
+
+/** disabled **/
+.mdl-layout__tab-bar-left-button,
+.mdl-layout__tab-bar-right-button{
+    display : none;
+}
+
+/** **/
+  .mdl-data-table td {
+    padding: 12px 15px 0 15px !important; 
+    text-align: right; }
+    
+   .mdl-data-table th {
+	padding: 0 15px 8px 15px !important; 
+    text-align: right;    
+   }

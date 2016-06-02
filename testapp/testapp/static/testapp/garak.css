@@ -1,0 +1,774 @@
+/** card1 **/
+.page-content {
+    position : relative;
+}
+
+.garak_card {
+    min-height : 0px;
+}
+
+.quick_input {
+	padding : 10px;
+	background-color: #2B3A5C;
+	border-radius : 5px;
+	box-shadow : 2px -1px 4px #000;
+	top:124px;
+	left:433px;
+	position: absolute;
+
+}
+
+.quick_input input {
+	width : 107px;
+	padding : 5px;
+	background: #FFFFFF;
+	box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.50);
+	border-radius: 5px;
+}
+
+.quick_input .sub_input {
+
+}
+
+.board {
+    position : absolute;
+    right : 20px;
+    top : 20px;;
+}
+
+.left_board {
+    float : left;
+}
+
+.right_board {
+    float : right;
+    margin-left : 20px;
+}
+
+.demo-card-wide.mdl-card {
+  width: 180px;
+}
+.demo-card-wide > .mdl-card__title {
+  color: #fff;
+    background-color : #d0021b;
+}
+
+.left_board .demo-card-wide > .mdl-card__title {
+  color: #fff;
+    background-color : #F5A623;
+}
+
+
+.demo-card-wide > .mdl-card__menu {
+  color: #fff;
+}
+
+.garak_card_title {
+    padding : 5px 0 0 0;
+    justify-content: center;
+    -ms-justify-content: center;
+    -webkit-justify-content: center;
+    
+}
+
+.garak_card_supporting_text {
+    padding : 0 0 5px 0;
+    text-align : center;
+    width : 100%;
+    background-color : #d0021b;
+    color : #FFF;
+    font-weight : bold;
+    font-size : 12px;
+}
+
+.left_board .garak_card_supporting_text {
+	background-color : #F5A623
+}
+
+/** global **/
+
+.clear:after {
+	content:""; 
+	display:block; 
+	clear:both;
+}
+
+.disabled {
+    display : none;
+}
+
+.current_tool {
+    width : 105px;
+    height : 50px;
+}
+
+.orange {
+	color : #F5A623;
+}
+
+.current_tool span {
+    height : 50px;
+    line-height : 50px;
+    text-align : center;
+    background-color : #5AAFEE;
+    font-size : 15px;
+}
+
+.garak_drawer {
+	font-size : 17px;
+	font-weight : 300;
+}
+
+.garak_drawer span {
+	
+}
+
+.garak_top_right_button {
+	position:absolute;
+	right: 0;
+	top: 8px;
+}
+
+.user_menu {
+	position :absolute;
+	right:24px;
+	top:15px;
+	color : #898989;
+	font-size : 14px;
+}
+
+.mdl-badge[data-badge]:after {
+	background : #7ED321 !important;
+	border-radius : 9px !important;
+	top : -2px;
+	right : -18px;
+}
+
+.garak_card {
+		border-radius : 8px !important;
+}
+
+.garak_card .mdl-card__actions {
+	border : 0;
+	padding : 0;
+}
+
+.garak_card .mdl-card__actions .mdl-button {
+	color : #000;
+	padding : 0;
+	width : 100%;
+	font-size : 18px;
+	height : 29px;
+	line-height: 29px;
+}
+
+.garak_card_title h2 {
+	font-size : 20px;
+}
+
+
+
+.garak_sales {
+
+}
+
+.garak_sales .mdl-layout__drawer-button {
+    background-color : transparent;
+    margin : 0 !important;
+    height : 50px;
+    width : 110px;
+}
+
+.garak_sales .mdl-layout__drawer-button i {
+    line-height : 50px;
+}
+
+.garak_sales .mdl-layout__header-row {
+    padding : 0 40px 0 110px;
+}
+
+.garak_sales .garak_sub_menu {
+    background-color : #3D4A54;
+}
+
+.garak_sub_menu {
+    width : 100% !important;
+    padding : 0 !important;
+}
+
+.mdl-layout {
+    max-width : 960px;
+    margin : 20px auto;
+    background-color : #35414A;
+}
+
+.mdl-layout .mdl-layout__header-row {
+    height : 50px;
+    background-color : #2D3840;
+}
+
+.mdl-layout .mdl-layout__tab {
+    height : 30px;
+    line-height : 30px;
+}
+
+.mdl-layout .mdl-layout__tab-bar-button {
+    background-color : #3D4A54;
+}
+
+.mdl-layout .mdl-layout__tab-bar-container {
+    height : 30px;
+}
+
+.page-content {
+	padding : 15px;
+}
+
+.garak_sub_title {
+	color : #F5A623;
+	font-size : 20px;
+	line-height : 28px;
+}
+
+.garak_sorting {
+	color : #9B9B9B;
+	font-size : 10px;
+}
+
+.garak_calendar {
+	margin-bottom : 20px;
+}
+
+.garak_calendar input {
+	border-radius : 5px;
+	border : 1px solid #ccc;
+	height : 30px;
+	line-height : 30px;
+	margin : 0 0 4px 0;
+}
+
+.garak_calendar i {
+    color : #9b9b9b;
+}
+
+.garak_calendar_start {
+	color : #fff;
+}
+
+.garak_calendar .garak_btn {
+	background-color : #6D7A83;
+	height : 29px;
+	line-height:29px;
+	min-width : 0;
+	width : 50px;
+	padding : 0;	
+}
+
+.garak_btn {
+	height : 28px !important;
+	line-height: 28px !important;
+}
+
+#main_table {
+	position : relative;
+}
+
+/*** 가락테이블 ***/
+table tr:last-child td:first-child {
+	border-radius : 0 0 0 15px;
+}
+
+table tr:last-child td:last-child {
+	border-radius : 0 0 15px 0;
+}
+
+#detail_table tr:last-child td {
+	border-radius : 0 0 15px 15px !important;
+}
+
+.order_progress, .calculate_progress {
+	display : none;
+	position: absolute;
+	z-index: 9;
+	width : 830px;
+	height : 42px;
+	line-height : 42px;
+	top : 80px;
+	left : 10px;
+	padding-left : 80px;
+	display : border-box;
+	background-color : #4A90E2;
+	font-weight : bold;
+	
+}
+
+.item_list {
+	display : none;
+}
+
+.table_highlight {
+    background-color : #F5A623 !important;;
+}
+
+#sub_table {
+    display : none;
+}
+
+#main_table .garak_table {
+	border : 0 !important;
+	border-radius : 15px;
+    width : 910px;
+    max-width : 910px;
+    table-layout: fixed;
+    margin : 0 auto 20px auto;
+}
+
+.garak_table td {
+	border-top : 0;
+	border-bottom : 0;
+}
+
+#sub_table .garak_table {
+	border : 0 !important;
+	border-radius : 15px;
+    width : 890px;
+    max-width : 890px;
+    table-layout: fixed;
+    margin : 0 auto 20px auto;
+}
+
+
+
+.garak_table tbody tr:hover  {
+	border-radius : 15px !important;
+}
+
+.garak_table td {
+    overflow :hidden;
+}
+
+tr:nth-child(even) {
+	background-color : #EEE;
+}
+
+#item_table th, #item_table td {
+	line-height : 40px;
+	padding : 0 !important;
+}
+
+#item_table label {
+	top : 0;
+	height : 40px;
+	line-height : 40px;
+}
+
+#item_table input {
+	line-height : 40px;
+}
+
+.page-content .garak_table tr {
+	height : 40px !important;
+}
+
+.page-content .garak_table td, .page-content .garak_table th {
+	padding-top : 0 !important;
+	padding-bottom : 0 !important;
+	line-height : 40px;
+	height : 40px !important; 
+}
+
+.page-content .mdl-checkbox {
+	top : 12px !important;
+}
+
+#item_table td:first-child, #item_table th:first-child {
+	width : 5%;
+}
+
+#item_table th:nth-child(2), #item_table td:nth-child(2) {
+	width : 10%;	
+}
+
+#item_table th:nth-child(3), #item_table td:nth-child(3) {
+	width : 10%;	
+}
+
+#item_table th:nth-child(4), #item_table td:nth-child(4) {
+	width : 10%;	
+}
+
+#item_table th:nth-child(5), #item_table td:nth-child(5) {
+	width : 11%;	
+}
+
+#item_table th:nth-child(6), #item_table td:nth-child(6) {
+	width : 11%;	
+}
+
+#item_table th:nth-child(7), #item_table td:nth-child(7) {
+	width : 20%;	
+	padding-right : 45px !important;
+}
+
+
+
+#main_table td:first-child, #main_table th:first-child {
+	width : 5%;
+}
+
+#main_table th:nth-child(2), #main_table td:nth-child(2) {
+	width : 10%;	
+}
+
+#main_table th:nth-child(3), #main_table td:nth-child(3) {
+	width : 10%;	
+}
+
+#main_table th:nth-child(4), #main_table td:nth-child(4) {
+	width : 5%;	
+}
+
+#main_table td:nth-child(4) {
+	color : #9013FE;
+}
+
+#main_table th:nth-child(5), #main_table td:nth-child(5) {
+	width : 11%;	
+}
+
+#main_table th:nth-child(6), #main_table td:nth-child(6) {
+	width : 11%;	
+}
+
+#main_table th:nth-child(7), #main_table td:nth-child(7) {
+	width : 11%;	
+}
+
+#main_table th:nth-child(8), #main_table td:nth-child(8) {
+	width : 11%;	
+}
+
+#main_table th:nth-child(9), #main_table td:nth-child(9) {
+
+}
+
+#main_table .pending td:nth-child(8), #main_table .pending td:nth-child(9) {
+	color : #D0021B;
+	font-weight : light;
+}
+
+#main_table .complete td:nth-child(8), #main_table .complete td:nth-child(9) {
+	color : #7ed321;
+	font-weight : light;
+}
+
+
+#item_table .mdl-checkbox {
+	left : 15px;
+}
+
+#item_table td:first-child, #item_table th:first-child {
+	width : 10%;
+}
+
+
+#main_table .mdl-data-table td .mdl-data-table__select {
+	left : 15px;
+}
+
+
+.garak_table th {
+	background-color : #000;
+	color : #fff;
+}
+
+.garak_table_title {
+	width : 910px;
+	height : 40px;
+	line-height: 40px;
+	background-color : #5AAFEE;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    margin : 0 auto;
+    color : white;
+    position:relative;
+}
+
+
+
+#sub_table .garak_table_title {
+    background-color : #F5A623;
+}
+
+.sub_table_wrapper {
+	padding : 10px;
+	background-color : #4A4A4A;
+	width : 890px;
+	margin : 0 auto;
+}
+
+.gara_table_export {
+	position: absolute;
+	right : 15px;
+	top : 0;
+}
+
+.garak_table_input input {
+    padding : 0 !important;
+    font-size : 13px;
+}
+
+.garak_table_input label {
+    font-size : 12px;
+    top : 11px;
+    width : 100%;
+}
+
+.detail_view_date {
+	color : #FFF;
+	margin-bottom: 5px;
+}
+
+.detail_view_date input {
+		border-radius : 5px;
+	border : 1px solid #ccc;
+	height : 25px;
+	line-height : 25px;
+	margin : 0 0 4px 0;
+}
+
+.detail_save {
+
+}
+
+.sub_right_wrapper .sub_right {
+	margin-bottom : 5px !important;
+}
+
+.detail_save button {
+	background-color : #F5A623;
+	width : 217px;
+	color : white;
+}
+
+.sub_left, .sub_right {
+	width : 440px !important;
+}
+
+.sub_left {
+	float : left;
+}
+
+.sub_left th:first-child {
+	border-radius : 8px 0 0 0;
+}
+
+.sub_left th:last-child {
+	border-radius : 0 8px 0 0;
+}
+
+.sub_right th {
+	border-radius : 8px 8px 0 0 ;
+}
+
+.sub_right {
+	float : right;
+	margin-left:10px;
+}
+
+.sub_table_wrapper .sub_right th {
+	text-align: center;
+}
+
+.sub_table_wrapper .sub_right td {
+	text-align: left;
+}
+
+.input_section td {
+/* 	display : none; */
+	border-radius : 0 !important;
+	background-color : #3D4A54;
+}
+
+.input_section {
+	box-shadow: inset 0px 9px 3px 0px rgba(0,0,0,0.50);	
+	display : none;
+		
+}
+
+.input_section .mdl-textfield.is-focused .mdl-textfield__label:after {
+	left:5px;
+}
+
+.input_section .mdl-textfield__label:after {
+	bottom : 8px;
+}
+
+
+.input_section .mdl-textfield__label {
+	text-align: right;
+	color : rgba(255,255,255, 0.26);
+}
+
+.input_section input {
+	color : #fff;
+}
+
+.last_column {
+    text-align : left !important;
+    padding-right : 90px !important;
+}
+
+.last_column .garak_btn {
+    position : absolute;
+    right : 10px;
+    top : 5px;
+    background-color : #5AAFEE;
+    color : #FFF;
+    font-weight : bold;
+}
+
+
+.bottom_navigation {
+	display : none;
+	width : 860px;
+	height:50px;
+	margin : 0 50px;
+	position : fixed;
+	bottom : 0;
+	/* Rectangle 76: */
+background: #5AAFEE;
+border: 1px solid #979797;
+box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.50);
+border-radius: 10px;
+z-index: 9999;
+}
+
+.new_item_container {
+	position : relative;
+}
+
+.new_item_container button {
+	position : absolute;
+	right : 10px;
+	top : 6px;
+	background-color: #5AAFEE;
+	width : 28px;
+	height : 28px;
+	min-width: 28px;
+	line-height: 28px;
+	padding : 0 !important;
+}
+
+
+#calculate_table {
+	margin : 0 auto;
+	width : 800px;
+	border : 0;	
+}
+
+#confirm_calculate {
+	width : 800px;
+	height : 70px;
+	background-color : #F5A623;
+	margin-top : 15px;
+	position : relative;
+	border-radius: 8px;
+}
+
+#confirm_calculate .summary {
+	margin-right : 155px;
+	font-size : 14px;
+	padding : 15px;
+}
+
+#confirm_calculate .confirm_btn {
+	position : absolute;
+	top : 15px;
+	right : 15px;
+}
+
+#confirm_calculate .confirm_btn .garak_btn {
+	background-color : #5AAFEE;
+	border-radius : 4px;
+}
+
+#calculate {
+	display : none;
+	position : absolute;
+	top : 30%;
+	left : 80px;
+	z-index : 999;
+}
+
+.calculate_overlay {
+	background-color : #000;
+	opacity : 0.7;
+	z-index : 99;
+	position : absolute;
+	top : 80px;
+	height : 100%;
+	width : 960px;
+	display : none;
+}
+
+#calculate .garak_table_title {
+	width : 800px;
+}
+
+.input_section input {
+	text-align : right;
+}
+
+/** disabled **/
+.mdl-layout__tab-bar-left-button,
+.mdl-layout__tab-bar-right-button{
+    display : none;
+}
+
+/** **/
+  .mdl-data-table td {
+    padding: 12px 12px 0 0;
+    text-align: right; }
+    
+   .mdl-data-table th {
+	padding: 0 15px 8px 15px !important; 
+    text-align: right;    
+   }
+   
+   
+   
+   
+  @keyframes blink {
+    0% {
+      opacity: .2;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      opacity: .2;
+    }
+}
+
+.progress span {
+    animation-name: blink;
+    animation-duration: 1.4s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+}
+
+.progress span:nth-child(2) {
+    animation-delay: .2s;
+}
+
+.progress span:nth-child(3) {
+    animation-delay: .4s;
+}
+
+/** 오토컴플릿 **/
+body .ui-widget-content {
+	border : 1px solid #fff;
+	background : #fff url("images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;
+	font-size : 12px;
+}
