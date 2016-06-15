@@ -228,6 +228,7 @@ function getCookie(c_name)
 }
 
 
+
 $(document).ready(function() {
 	$('.quick_code_set').on("click", function() {
 		quick_input_set();
@@ -413,3 +414,4 @@ $(document).ready(function() {
     
     
 });
+
