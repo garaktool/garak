@@ -15,7 +15,8 @@
         <script src="{% static 'testapp/material.js' %}"></script>
         <script src="{% static 'testapp/mdl-select.js' %}"></script>
         <script src="{% static 'testapp/garak.js' %}"></script>
-        <script src="{% static 'testapp/jquery-ui.js' %}"></script>    
+        <script src="{% static 'testapp/jquery-ui.js' %}"></script>
+        <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>    
 
         <script>
             var today = new Date();

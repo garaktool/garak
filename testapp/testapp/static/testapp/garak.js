@@ -191,40 +191,51 @@ function calculate_open() {
 
 	$('#calculate').show();
 }
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
 
-
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
 
 function submit(form) {
-	url = "/submit_order"
+    url = "/submit_order"
 
-	$.ajax({
-		headers: { "X-CSRFToken": getCookie("csrftoken") },
-		url: "/submit_order",
-		cache: false,
-		method: "POST",
-		data: {order_amount:"60000000",collect_money:"20000000",subtract_amount:"10000000",outstanding_amount:"30000000", description:"봉수네 상회 일껄",order_pk:"1"}
-	})
-	.done(function(msg) {
-		alert("Data Saved : " + msg);
-	})
-	.fail(function() {
-		alert("failed");
-	})
-}
-function getCookie(c_name)
-{
-	if (document.cookie.length > 0)
-	{
-		c_start = document.cookie.indexOf(c_name + "=");
-		if (c_start != -1)
-		{
-			c_start = c_start + c_name.length + 1;
-			c_end = document.cookie.indexOf(";", c_start);
-			if (c_end == -1) c_end = document.cookie.length;
-			return unescape(document.cookie.substring(c_start,c_end));
-		}
-	}
-	return "";
+    $.ajax({
+        url: "/submit_order",
+        cache: false,
+        method: "POST",
+        data: {order_amount:"60000000",collect_money:"20000000",subtract_amount:"10000000",outstanding_amount:"30000000", description:"봉수네 상회 일껄",order_pk:"1"},
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+    })
+    .done(function(msg) {
+        alert("Data Saved : " + msg);
+    })
+    .fail(function() {
+        alert("failed");
+    })
 }
 
 
