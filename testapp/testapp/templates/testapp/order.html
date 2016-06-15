@@ -1,99 +1,111 @@
 {% load staticfiles %}
+{% load humanize %}
 
 <html class="mdl-js">
-<head>
-<title>
-    GarakTool
-</title>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">    
-<link rel="stylesheet" type="text/css" href="{% static 'testapp/material.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'testapp/garak.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'testapp/date/css/bootstrap-datepicker3.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'testapp/jquery-ui.css' %}" />
-<script src="{% static 'testapp/jquery-1.11.3.min.js' %}"></script>
-<script src="{% static 'testapp/material.js' %}"></script>
-<script src="{% static 'testapp/garak.js' %}"></script>
-<script src="{% static 'testapp/jquery-ui.js' %}"></script>    
+    <head>
+        <title>
+            GarakTool
+        </title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/material.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/garak.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/date/css/bootstrap-datepicker3.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/jquery-ui.css' %}" />
+        <script src="{% static 'testapp/jquery-1.11.3.min.js' %}"></script>
+        <script src="{% static 'testapp/material.js' %}"></script>
+        <script src="{% static 'testapp/mdl-select.js' %}"></script>
+        <script src="{% static 'testapp/garak.js' %}"></script>
+        <script src="{% static 'testapp/jquery-ui.js' %}"></script>    
 
-<script>
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1; //January is 0!
-var yyyy = today.getFullYear();
-
-if(dd<10) {
-    dd='0'+dd
-} 
-
-if(mm<10) {
-    mm='0'+mm
-} 
-
-today = yyyy+'/'+mm+'/'+dd;
-
-</script>
-
-<script>
-  $(function() {
-    $( "#datepicker_start" ).datepicker();
-    $( "#datepicker_end" ).datepicker();
-    $( "#order_date" ).datepicker();
-    $( "#income_date" ).datepicker();
-  });
-</script>
-  
-<script>
-  $(function() {
-    var code_ac = [
-      "정정당당(001)",
-      "중현야채(002)",
-      "경석김치(004)"
-    ];
-    var product_code_ac = [
-        "배추(001)",
-        "무(002)"
-    ];
-    var product_grade_ac = [
-        "1급(1)",
-        "2급(2)",
-        "3급(3)",
-        "똥(4)"
-    ];
-    var product_unit_ac = [
-        "박스(1)",
-        "트럭(2)",
-        "컨테이너(3)"
-    ]
-    $( "#quick_code" ).autocomplete({
-      delay : 0,
-      autoFocus: true,
-      source: code_ac
-    });
-    $( "#company_code" ).autocomplete({
-      delay : 0,
-      autoFocus: true,
-      source: code_ac
-    });
-    $( "#product_code_input" ).autocomplete({
-      delay : 0,
-      autoFocus: true,
-      source: product_code_ac
-    });
-    $( "#product_grade_input" ).autocomplete({
-      delay : 0,
-      autoFocus: true,
-      source: product_grade_ac
-    });
-    $( "#product_unit_input" ).autocomplete({
-      delay : 0,
-      autoFocus: true,
-      source: product_unit_ac
-    });
-    
-  });
-  </script>
-</head>
+        <script>
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            
+            if(dd<10) {
+                dd='0'+dd
+            } 
+            
+            if(mm<10) {
+                mm='0'+mm
+            } 
+            
+            today = yyyy+'/'+mm+'/'+dd;
+            
+            </script>
+            
+            <script>
+              $(function() {
+                $( "#datepicker_start" ).datepicker();
+                $( "#datepicker_end" ).datepicker();
+                $( "#order_date" ).datepicker();
+                $( "#income_date" ).datepicker();
+              });
+            </script>
+              
+            <script>
+              $(function() {
+                var bank = [
+                "국민은행",
+                "기업은행",
+                "신한은행",
+                "농협"
+                ];
+                var code_ac = [
+                  "정정당당(001)",
+                  "중현야채(002)",
+                  "경석김치(004)"
+                ];
+                var product_code_ac = [
+                    "배추(001)",
+                    "무(002)"
+                ];
+                var product_grade_ac = [
+                    "1급(1)",
+                    "2급(2)",
+                    "3급(3)",
+                    "똥(4)"
+                ];
+                var product_unit_ac = [
+                    "박스(1)",
+                    "트럭(2)",
+                    "컨테이너(3)"
+                ]
+                $( "#quick_code" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: code_ac
+                });
+                $( "#company_code" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: code_ac
+                });
+                $( "#product_code_input" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: product_code_ac
+                });
+                $( "#product_grade_input" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: product_grade_ac
+                });
+                $( "#product_unit_input" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: product_unit_ac
+                });
+                $( "#bank" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: bank
+                });
+                
+              });
+              </script>
+            </head>
 
 <body>
 <!-- Simple header with scrollable tabs. -->
@@ -170,7 +182,7 @@ today = yyyy+'/'+mm+'/'+dd;
 
             <form id="range">
                 <div class="garak_sub_title">
-                    발주 관리
+                    수주 관리
                 </div>
                 <div class="garak_sorting">
                     일주일  |  한달  |  전체
@@ -201,7 +213,7 @@ today = yyyy+'/'+mm+'/'+dd;
         
                 <div id="main_table">
                     <div class="order_progress progress">
-                        발주 진행중<span>.</span><span>.</span><span>.</span>
+                        수주 진행중<span>.</span><span>.</span><span>.</span>
                     </div>
                     <div class="garak_table_title">
                         <!-- <i class="material-icons">view_module</i> --><span style="padding-left : 15px;">2015/08/01 부터 2015/08/31 까지 거래 내역</span>
@@ -223,7 +235,7 @@ today = yyyy+'/'+mm+'/'+dd;
                           <th>미수금</th>
                           <th class="last_column">비고
                             <button id="new_order" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
-                                     새발주
+                                     새수주
                             </button>                                
 
                             </th>
@@ -270,15 +282,15 @@ today = yyyy+'/'+mm+'/'+dd;
                             </td>
                          </tr>
 -->
-
+                        
                         {% for order_list in order_info %}
                         <tr class="order_list dummy_data pending" id="{{order_list.id}}">
-                          <td class="date">{{ order_list.order_date}}</td>
+                          <td class="date">{{ order_list.order_date|date:"Y-m-d" }}</td>
                           <td class="code">{{ order_list.selling_partner.name}}</td>
-                          <td class="kind">{{ order_lis.order_item_set.count }}</td>
-                          <td class="amount">{{ order_list.order_amount}}</td>
-                          <td class="collect">{{ order_list.collect_money}}</td>
-                          <td class="deduct">{{ order_list.subtract_amount}}</td>
+                          <td class="kind">{{ order_list.order_item_set.count }}</td>
+                          <td class="amount">{{ order_list.order_amount|intcomma }}</td>
+                          <td class="collect">{{ order_list.collect_money|intcomma }}</td>
+                          <td class="deduct">{{ order_list.subtract_amount|intcomma }}</td>
                           <td class="unconsumed">{{ order_list.outstanding_amount}}</td>
                           <td class="note last_column">{{ order_list.description}}</td>
                           <td class="item_list">
@@ -378,7 +390,7 @@ today = yyyy+'/'+mm+'/'+dd;
                 
                 <div id="sub_table">
                     <div class="garak_table_title">
-                        <!-- <i class="material-icons">view_module</i> --><div style="padding-left : 15px;">상세발주내역</div>
+                        <!-- <i class="material-icons">view_module</i> --><div style="padding-left : 15px;">상세수주내역</div>
                                                 <div class="gara_table_export">
                             <span>엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
                         </div>
@@ -439,7 +451,7 @@ today = yyyy+'/'+mm+'/'+dd;
                                 <tbody>
                                     <tr class="top_radius">
                                         <th colspan="2">
-                                            발주 내용
+                                            수주 내용
                                                 
                                         </th>
                                     </tr>
@@ -457,7 +469,11 @@ today = yyyy+'/'+mm+'/'+dd;
                                             수금액 : <input class="collect">
                                         </td>
                                         <td>    
-                                            수금형태 : <input>
+                                            수금형태 : <select>
+                                            <option value="1">입금</option>
+                                            <option value="2">외상</option>
+                                            <option value="3">현금</option>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
@@ -465,7 +481,7 @@ today = yyyy+'/'+mm+'/'+dd;
                                             공제액 : <input class="deduct">
                                         </td>
                                         <td>    
-                                            수금은행 : <input>
+                                            수금은행 : <input id="bank">
                                         </td>
                                     </tr>
                                     <tr>

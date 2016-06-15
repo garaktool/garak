@@ -98,7 +98,9 @@ function detail_open(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 	$('#sub_table .note').val(note);				
 	$('#sub_table .status').text(status);
 	
+	
 	$('#sub_table').show();
+	
 
 }
 
@@ -191,21 +193,38 @@ function calculate_open() {
 }
 
 
+
 function submit(form) {
-    url = "/"
-    
-    $.ajax({
-        url: form,
-        cache: false,
-        method: "POST",
-        data: {name:"배추", owner:"봉수"}
-    })
-    .done(function(msg) {
-        alert("Data Saved : " + msg);
-    })
-    .fail(function() {
-        alert("failed");
-    })
+	url = "/submit_order"
+
+	$.ajax({
+		headers: { "X-CSRFToken": getCookie("csrftoken") },
+		url: "/submit_order",
+		cache: false,
+		method: "POST",
+		data: {order_amount:"60000000",collect_money:"20000000",subtract_amount:"10000000",outstanding_amount:"30000000", description:"봉수네 상회 일껄",order_pk:"1"}
+	})
+	.done(function(msg) {
+		alert("Data Saved : " + msg);
+	})
+	.fail(function() {
+		alert("failed");
+	})
+}
+function getCookie(c_name)
+{
+	if (document.cookie.length > 0)
+	{
+		c_start = document.cookie.indexOf(c_name + "=");
+		if (c_start != -1)
+		{
+			c_start = c_start + c_name.length + 1;
+			c_end = document.cookie.indexOf(";", c_start);
+			if (c_end == -1) c_end = document.cookie.length;
+			return unescape(document.cookie.substring(c_start,c_end));
+		}
+	}
+	return "";
 }
 
 
