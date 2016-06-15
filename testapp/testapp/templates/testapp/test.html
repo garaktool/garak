@@ -1,0 +1,25 @@
+<b>db value test</b>
+<br><br><br><br>
+{% for order_list in order_info %}	
+	<b>[order info]</b><br>
+	id :{{ order_list.id}}<br>
+	order_date :{{ order_list.order_date}}<br>
+	selling_partner :{{ order_list.selling_partner.name}}<br>
+	order_amount :{{ order_list.order_amount}}<br>
+	collect_money :{{ order_list.collect_money}}<br>
+	subtract_amount :{{ order_list.subtract_amount}}<br>
+	outstanding_amount :{{ order_list.outstanding_amount}}<br>
+	description :{{ order_list.description}}<br>
+
+	<br><br><br><br>
+	<b>[Item info]</b><br>
+	{% for order_item in order_list.order_item_set.all %}
+		{{order_item.id}} <br>
+		{{order_item.product.name}} <br>
+		{{order_item.unit_price}} <br>
+		{{order_item.amount}} <br>
+		{{order_item.grade}} <br>
+		{{order_item.description}} <br>
+		-----------------------<br>
+	{% endfor %}
+{% endfor %}

@@ -131,7 +131,6 @@ function input_init() {
     	 	$('#product_quantity input').val('');
     	 	$('#product_amount input').val('');
     	 	$('#product_code input').focus();    	 	
-	
 }
 
 function quick_code_set() {
@@ -139,6 +138,26 @@ function quick_code_set() {
     	 {
 				 quick_input_set();
 		  }
+}
+
+function set_company() {
+    if(event.keyCode == 13)
+        {
+            $('#product_code input').focus();
+        }
+           
+}
+
+function set_today() {
+    if(event.keyCode == 13)
+        {
+            if($('#order_date').val() == '')
+                {
+                    $('.today').val(today);
+                }
+                
+            $('#company_code').focus();
+        }
 }
 
 
@@ -151,6 +170,7 @@ function enterTab() {
 }
 
 function enterKeySubmit() {
+
 	if(event.keyCode == 13)
     	 {
     	 	code = $('#product_code input').val();
@@ -169,6 +189,25 @@ function calculate_open() {
 
 	$('#calculate').show();
 }
+
+
+function submit(form) {
+    url = "/"
+    
+    $.ajax({
+        url: form,
+        cache: false,
+        method: "POST",
+        data: {name:"배추", owner:"봉수"}
+    })
+    .done(function(msg) {
+        alert("Data Saved : " + msg);
+    })
+    .fail(function() {
+        alert("failed");
+    })
+}
+
 
 $(document).ready(function() {
 	$('.quick_code_set').on("click", function() {
@@ -257,7 +296,11 @@ $(document).ready(function() {
         $('#order_table > tbody:first').prepend('<tr class="order_list table_highlight"><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td class="date"></td><td class="code"></td><td class="kind"></td><td class="amount"></td><td class="collect"></td><td class="deduct"></td><td class="unconsumed"></td><td class="note last_column"></td></tr>');
         detail_new();
 		$('.order_progress').show();        
-		input_init();
+// 		input_init();
+        $('#order_date').focus();
+// 		$('.today').val(today);
+		$('.today').attr('placeholder', today)
+
 		}
     });
 

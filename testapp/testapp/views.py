@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import generic
 from django.core.urlresolvers import reverse
-from testapp.forms import ProductForm
-from .models import Product
+from testapp.forms import ProductForm,OrderForm
+from .models import Product, Order, Order_item, Company
 
 
 class ProductDetailView(generic.DetailView):
@@ -19,15 +19,32 @@ class ProductListView(generic.ListView):
 	def get_queryset(self):
 		return Product.objects.order_by('-pub_date')[:5]
 
-#test page
-def hello(request):
-    return HttpResponse("Hello world")
-
 def index(request):
     latest_product_list = Product.objects.order_by('-pub_date')[:5]
     context = {'latest_product_list': latest_product_list} 
     return render(request, 'testapp/index.html', context)
 
+####################################################################
+#order view page
+def order(request):
+	order_info=""
+	
+	try:
+		#order_info = Order.objects.get(pk=order_id)
+		order_info = Order.objects.order_by('-order_date')[:10]
+		
+	except Order.DoesNotExist:
+		raise Http404("Order does not exist")
+
+	return render(request, 'testapp/order.html', {'order_info': order_info})
+################################################################################
+def order_form(request):
+	if request.method == 'POST':
+		form = NameForm(request.POST)
+		if form.is_valid():
+			new_order_amount=form.cleaned_data[order_amount]
+	else:
+		form = OrderForm()
 
 #product detail view page
 def product_detail(request, product_id):

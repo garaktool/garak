@@ -8,3 +8,6 @@ class ProductForm(ModelForm):
 		model = Product
 		#fields = '__all__'
 		fields = ['unit', 'price', 'description','question_text','name']
+
+class OrderForm(ModelForm):
+	order_amount = forms.IntegerField(label='Order amount')

@@ -283,7 +283,7 @@ today = yyyy+'/'+mm+'/'+dd;
                           <td class="note last_column">{{ order_list.description}}</td>
                           <td class="item_list">
                                 {% for order_item in order_list.order_item_set.all %}
-                              <span id="{{order_item.id}}">{{ product_info.name }},1급(1),박스(1),10000,1,10000</span>
+                              <span id="{{order_item.id}}">{{order_item.product.name}},{{order_item.grade}},{{order_item.product.unit}},{{order_item.unit_price}},{{order_item.amount}},</span>
                               {% endfor %}
                           </td>                        
                         </tr>
