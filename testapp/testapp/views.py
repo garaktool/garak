@@ -4,8 +4,10 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import generic
 from django.core.urlresolvers import reverse
-from testapp.forms import ProductForm,OrderForm
+from django.utils import timezone
+from testapp.forms import ProductForm
 from .models import Product, Order, Order_item, Company
+import json
 
 
 class ProductDetailView(generic.DetailView):
@@ -25,10 +27,9 @@ def index(request):
     return render(request, 'testapp/index.html', context)
 
 ####################################################################
-#order view page
+#order page
 def order(request):
 	order_info=""
-	
 	try:
 		#order_info = Order.objects.get(pk=order_id)
 		order_info = Order.objects.order_by('-order_date')[:10]
@@ -37,6 +38,45 @@ def order(request):
 		raise Http404("Order does not exist")
 
 	return render(request, 'testapp/order.html', {'order_info': order_info})
+
+def submit_order(request):
+	response_data={}
+	response_data['result'] = 'failed'
+	if request.method == 'POST':
+		if request.POST['order_pk']:
+			try:
+				order_info = Order.objects.get(pk=request.POST['order_pk'])
+				order_info.order_date=timezone.now() 
+				order_info.order_amount=request.POST['order_amount']
+				order_info.collect_money=request.POST['collect_money']
+				order_info.subtract_amount=request.POST['subtract_amount']
+				order_info.outstanding_amount=request.POST['outstanding_amount']
+				order_info.description=request.POST['description']
+				order_info.save()
+			except Order.DoesNotExist:
+				response_data['result'] = 'Order DoesNotExist'
+		else:
+			order_info = Order(
+				order_date=timezone.now(), 
+				order_amount=request.POST['order_amount'],
+				collect_money=request.POST['collect_money'],
+				subtract_amount=request.POST['subtract_amount'],
+				outstanding_amount=request.POST['outstanding_amount'],
+				description=request.POST['description'])
+			order_info.save()
+			response_data['result'] = 'success'
+
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		response_data['result'] = 'method errorr(POST)'
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+
 ################################################################################
 def order_form(request):
 	if request.method == 'POST':
