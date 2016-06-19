@@ -224,7 +224,7 @@
                         
                     </div>
 
-                    <table id="order_table" class="garak_table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                    <table id="order_table" class="scrolltbody garak_table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
                       <thead>
                         <tr>
                           <th>매출날짜</th>
@@ -243,75 +243,36 @@
                         </tr>
                       </thead>
                       <tbody>
-<!--
-                        <tr class="input_section">
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1" value="윰성">
-                                <label class="mdl-textfield__label" for="sample1">매출날짜</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">매출처</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">품목</label>
-                            </td>
 
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">매출액</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">수금액</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">공제액</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">미수금</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input last_column">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">비고</label>
-                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
-                                     새발주
-                                  </button>                                
-                            </td>
-                         </tr>
--->
                         
                         {% for order_list in order_info %}
-                        <tr class="order_list dummy_data pending" id="{{order_list.id}}">
-                          <td class="date">{{ order_list.order_date|date:"Y-m-d" }}</td>
-                          <td class="code">{{ order_list.selling_partner.name}}</td>
-                          <td class="kind">{{ order_list.order_item_set.count }}</td>
-                          <td class="amount">{{ order_list.order_amount|intcomma }}</td>
-                          <td class="collect">{{ order_list.collect_money|intcomma }}</td>
-                          <td class="deduct">{{ order_list.subtract_amount|intcomma }}</td>
-                          <td class="unconsumed">{{ order_list.outstanding_amount}}</td>
-                          <td class="note last_column">{{ order_list.description}}</td>
-                          <td class="item_list">
+                        <tr data-role="order" class="order_list dummy_data pending" id="order_{{order_list.id}}">
+                          <td data-role="value" class="date">{{ order_list.order_date|date:"Y-m-d" }}</td>
+                          <td data-role="value" class="code">{{ order_list.selling_partner.name}}</td>
+                          <td data-role="value" class="kind">{{ order_list.order_item_set.count }}</td>
+                          <td data-role="value" class="amount">{{ order_list.order_amount|intcomma }}</td>
+                          <td data-role="value" class="collect">{{ order_list.collect_money|intcomma }}</td>
+                          <td data-role="value" class="deduct">{{ order_list.subtract_amount|intcomma }}</td>
+                          <td data-role="value" class="unconsumed">{{ order_list.outstanding_amount}}</td>
+                          <td data-role="value" class="note last_column">{{ order_list.description}}</td>
+                          <td data-role="value" class="item_list">
                                 {% for order_item in order_list.order_item_set.all %}
-                              <span id="{{order_item.id}}">{{order_item.product.name}},{{order_item.grade}},{{order_item.product.unit}},{{order_item.unit_price}},{{order_item.amount}},</span>
+                              <span data-role="item" class="{{order_item.id}}">{{order_item.product.name}},{{order_item.grade}},{{order_item.product.unit}},{{order_item.unit_price}},{{order_item.amount}},</span>
                               {% endfor %}
                           </td>                        
                         </tr>
                         {% endfor %}
 
-                        <tr class="order_list dummy_data pending">
-                          <td class="date">2015-08-07</td>
-                          <td class="code">정정당당(001)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">0</td>
-                          <td class="unconsumed">20,000</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
+                        <tr data-role="order" class="order_list dummy_data pending">
+                          <td data-role="value" class="date">2015-08-07</td>
+                          <td data-role="value" class="code">정정당당(001)</td>
+                          <td data-role="value" class="kind">4</td>
+                          <td data-role="value" class="amount">40,000</td>
+                          <td data-role="value" class="collect">20,000</td>
+                          <td data-role="value" class="deduct">0</td>
+                          <td data-role="value" class="unconsumed">20,000</td>
+                          <td data-role="value" class="note last_column">8/24 국민은행 입금</td>
+                          <td data-role="value" class="item_list">
                               <span>{{ product_info.name }},1급(1),박스(1),10000,1,10000</span>
                               <span>배추(001),1급(1),박스(1),10000,1,10000</span>
                               <span>배추(001),1급(1),박스(1),10000,1,10000</span>
@@ -459,7 +420,7 @@
         
                                     <tr>
                                         <td>
-                                            매출액 : <input class="amount">
+                                            <span>매출액 : </span><input class="amount"></input>
                                         </td>
                                         <td>    
                                             수금날짜 : <input id="income_date">

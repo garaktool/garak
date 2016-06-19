@@ -1,3 +1,14 @@
+/** scroll **/
+.scrolltbody {
+    display: block;
+    border-collapse: collapse;
+}
+.scrolltbody tbody {
+    display: block;
+    height: 200px;
+    overflow: auto;
+}
+
 /** mdl override **/
 
 .mdl-layout.is-upgraded .mdl-layout__tab.is-active::after {
@@ -378,6 +389,10 @@ table tr:last-child td:last-child {
 .garak_table td {
 	border-top : 0;
 	border-bottom : 0;
+}
+
+#detail_table input {
+    width : 70%;
 }
 
 #sub_table .garak_table {

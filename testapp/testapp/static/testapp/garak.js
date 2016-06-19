@@ -227,7 +227,12 @@ function submit(form) {
         url: "/submit_order",
         cache: false,
         method: "POST",
-        data: {order_amount:"60000000",collect_money:"20000000",subtract_amount:"10000000",outstanding_amount:"30000000", description:"봉수네 상회 일껄",order_pk:"1"},
+        data: {order_amount:"60000000",collect_money:"20000000",subtract_amount:"10000000",outstanding_amount:"30000000", description:"봉수네 상회 일껄",selling_partner:"2",order_pk:"1",
+                order_item_list:[
+                {id:"2",order:"1",product:"1",unit_price:"1000",amount:"10",grade:"1등급",description:"gg"},
+                {id:"1",order:"1",product:"1",unit_price:"1000",amount:"100",grade:"1등급",description:"gggg"}
+                ]
+            },
         csrfmiddlewaretoken: '{{ csrf_token }}'
     })
     .done(function(msg) {
@@ -239,6 +244,14 @@ function submit(form) {
 }
 
 
+var order = {
+    id:"1",
+    
+    init: function () {
+        $('[data-role="order"] [data-role="value"]').text('');
+    }
+    
+}
 
 $(document).ready(function() {
 	$('.quick_code_set').on("click", function() {
