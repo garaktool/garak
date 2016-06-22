@@ -249,6 +249,32 @@ var order = {
     
     init: function () {
         $('[data-role="order"] [data-role="value"]').text('');
+    },
+    
+    get: function() {
+        $.ajax({
+            url: "/submit_order",
+            cache: false,
+            method: "GET"
+        })
+        .done(function(msg) {
+            alert("Data Loaded : " + msg);
+        })
+        .fail(function() {
+            alert("failed");
+        })
+    },
+    
+    fold: function() {
+        
+        $('#order_table tbody').css('height', '200px');
+        
+        
+        
+    },
+    
+    unfold: function() {
+        $('#order_table tbody').css('height', '600px');
     }
     
 }
@@ -305,6 +331,7 @@ $(document).ready(function() {
     $(document).on("click", ".order_list td", function() {
         if($(this).parent().hasClass('table_highlight')) {
 		detail_close();
+		order.unfold();
         }
         else {
 			detail_close();
@@ -323,6 +350,7 @@ $(document).ready(function() {
 			}
 			
             detail_open(date,code,kind,amount,collect,deduct,unconsumed,note,status);
+            order.fold();
         }
     });
     

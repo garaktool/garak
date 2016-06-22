@@ -5,8 +5,9 @@
 }
 .scrolltbody tbody {
     display: block;
-    height: 200px;
+    height: 600px;
     overflow: auto;
+    transition: all 0.05s cubic-bezier(0.4, 0, 1, 1); 
 }
 
 /** mdl override **/

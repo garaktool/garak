@@ -181,7 +181,7 @@
                 <div id="quick_input_list" class="quick_input_list">
                 </div>
 
-            <form id="range">
+
                 <div class="garak_sub_title">
                     수주 관리
                 </div>
@@ -204,7 +204,7 @@
                     </div>
 
                 </div>
-            </form>
+
                 <div class="garak_sorting">
                     모든내역 | 매출액순 | 미수금순 | 다른옵션
                 </div> 
@@ -242,7 +242,7 @@
                             </th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody id="order_table_tbody">
 
                         
                         {% for order_list in order_info %}
@@ -346,6 +346,159 @@
                               <span>배추(001),1급(1),박스(1),10000,1,10000</span>
                           </td>                          
                         </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
                       </tbody>
                     </table>
                 </div>
@@ -579,46 +732,7 @@
                         </tr>
                       </thead>
                       <tbody>
-<!--
-                        <tr class="input_section">
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1" value="윰성">
-                                <label class="mdl-textfield__label" for="sample1">매출날짜</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">매출처</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">품목</label>
-                            </td>
 
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">매출액</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">수금액</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">공제액</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">미수금</label>
-                            </td>
-                            <td class="mdl-textfield mdl-js-textfield garak_table_input last_column">
-                                <input class="mdl-textfield__input" type="text" id="sample1">
-                                <label class="mdl-textfield__label" for="sample1">비고</label>
-                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
-                                     새발주
-                                  </button>                                
-                            </td>
-                         </tr>
--->
                         <tr class="">
                           <td>2015-09-02</td>
                           <td>정정당당(001)</td>
