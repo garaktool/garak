@@ -246,6 +246,7 @@ function submit(form) {
 
 var order = {
     id:"1",
+    status:"unfold",
     
     init: function () {
         $('[data-role="order"] [data-role="value"]').text('');
@@ -266,15 +267,22 @@ var order = {
     },
     
     fold: function() {
+    
+        $('#order_table tbody').attr('style', 'height:200px');
         
-        $('#order_table tbody').css('height', '200px');
+        setTimeout(function() {
+            var scroll_id_char = $('.table_highlight').attr('id');
+            $('#order_table_tbody').scrollTop(scroll_id_char.slice(-1) * 40 - 40)
+        }, 65);
         
-        
+        order.status = 'fold';
         
     },
     
     unfold: function() {
         $('#order_table tbody').css('height', '600px');
+        
+        order.status = 'unfold';
     }
     
 }
@@ -350,7 +358,9 @@ $(document).ready(function() {
 			}
 			
             detail_open(date,code,kind,amount,collect,deduct,unconsumed,note,status);
-            order.fold();
+            if(order.status == 'unfold') {
+                order.fold();
+            }
         }
     });
     
