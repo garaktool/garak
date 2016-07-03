@@ -278,23 +278,29 @@ var order = {
         })
     },
     
-    fold: function() {
-    
+    fold: function(callback) {
         $('#order_table tbody').attr('style', 'height:200px');
-        
         setTimeout(function() {
             var scroll_id_char = $('.table_highlight').attr('id');
             $('#order_table_tbody').scrollTop(scroll_id_char.slice(-1) * 40 - 40)
-        }, 65);
-        
+        }, 310);
         order.status = 'fold';
+        
+        if (typeof callback === "function") {
+            callback();
+        }   
         
     },
     
-    unfold: function() {
+    unfold: function(callback) {
         $('#order_table tbody').css('height', '600px');
         
         order.status = 'unfold';
+        
+        if (typeof callback === "function") {
+            callback();
+        }   
+
     }
     
 }
@@ -391,9 +397,14 @@ $(document).ready(function() {
         detail_new();
 		$('.order_progress').show();        
 // 		input_init();
-        $('#order_date').focus();
+//         $('#order_date').focus();
 // 		$('.today').val(today);
-		$('.today').attr('placeholder', today)
+		$('.today').attr('placeholder', today);
+        order.fold();
+        
+        setTimeout(function() {
+            $('#order_date').focus();
+        }, 350);
 
 		}
     });

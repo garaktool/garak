@@ -6,8 +6,12 @@
 .scrolltbody tbody {
     display: block;
     height: 600px;
-    overflow: auto;
-    transition: all 0.05s cubic-bezier(0.4, 0, 1, 1); 
+    /* overflow: auto; */
+    overflow-y : overlay;
+    transition: all 0.35s cubic-bezier(0.4, 0, 1, 1); 
+}
+    
+    
 }
 
 /** mdl override **/
@@ -481,19 +485,19 @@ tr:nth-child(even) {
 
 
 #main_table td:first-child, #main_table th:first-child {
-	width : 5%;
+	width : 44px;
 }
 
 #main_table th:nth-child(2), #main_table td:nth-child(2) {
-	width : 10%;	
+	width : 91px;	
 }
 
 #main_table th:nth-child(3), #main_table td:nth-child(3) {
-	width : 10%;	
+	width : 93px;	
 }
 
 #main_table th:nth-child(4), #main_table td:nth-child(4) {
-	width : 5%;	
+	width : 45px;	
 }
 
 #main_table td:nth-child(4) {
@@ -501,23 +505,23 @@ tr:nth-child(even) {
 }
 
 #main_table th:nth-child(5), #main_table td:nth-child(5) {
-	width : 11%;	
+	width : 100px;	
 }
 
 #main_table th:nth-child(6), #main_table td:nth-child(6) {
-	width : 11%;	
+	width : 100px;	
 }
 
 #main_table th:nth-child(7), #main_table td:nth-child(7) {
-	width : 11%;	
+	width : 100px;	
 }
 
 #main_table th:nth-child(8), #main_table td:nth-child(8) {
-	width : 11%;	
+	width : 100px;	
 }
 
 #main_table th:nth-child(9), #main_table td:nth-child(9) {
-
+    width : 237px;
 }
 
 #main_table .pending td:nth-child(8), #main_table .pending td:nth-child(9) {
@@ -854,3 +858,14 @@ body .ui-widget-content {
 	background : #fff url("images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;
 	font-size : 12px;
 }
+
+
+
+body .mdl-layout__container {
+    height : initial;
+}
+
+body {
+    overflow-y : scroll;
+}
+
