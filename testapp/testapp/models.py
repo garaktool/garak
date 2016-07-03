@@ -9,6 +9,8 @@ class Company(models.Model):
 	address = models.CharField(max_length=200,default=0)
 	pic_name = models.CharField(max_length=200,default=0)
 	description = models.CharField(max_length=200,default=0)
+	def __unicode__(self):
+		return 'Company: ' + self.name 
 
 @deconstructible
 class Product(models.Model):
@@ -16,8 +18,8 @@ class Product(models.Model):
 	unit =  models.CharField(max_length=100,default=0)
 	name =  models.CharField(max_length=100,default=0)
 	description = models.CharField(max_length=200,default=0)
-	price = models.IntegerField(default=0)
-	question_text = models.CharField(max_length=200,default=0)
+	def __unicode__(self):
+		return 'Product: ' + self.name
 
 @deconstructible
 class Order(models.Model):
@@ -29,6 +31,8 @@ class Order(models.Model):
 	subtract_amount = models.IntegerField(default=0) 
 	outstanding_amount = models.IntegerField(default=0) 
 	description = models.CharField(max_length=200,default=0)
+	def __unicode__(self):
+		return 'Order: ' + self.description
 
 @deconstructible
 class Order_item(models.Model):
@@ -39,7 +43,6 @@ class Order_item(models.Model):
 	amount = models.IntegerField(default=0)
 	grade = models.CharField(max_length=200,default=0)
 	description = models.CharField(max_length=200,default=0)
-
-
-
-
+	
+	def __unicode__(self):
+		return 'Order_item: ' + self.product.name

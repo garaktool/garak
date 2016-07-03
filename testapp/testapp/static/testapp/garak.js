@@ -220,29 +220,41 @@ $.ajaxSetup({
     }
 });
 
+
 function submit(form) {
     url = "/submit_order"
-
-    $.ajax({
+	
+	$.ajax({
         url: "/submit_order",
         cache: false,
         method: "POST",
-        data: {order_amount:"60000000",collect_money:"20000000",subtract_amount:"10000000",outstanding_amount:"30000000", description:"봉수네 상회 일껄",selling_partner:"2",order_pk:"1",
-                order_item_list:[
-                {id:"2",order:"1",product:"1",unit_price:"1000",amount:"10",grade:"1등급",description:"gg"},
-                {id:"1",order:"1",product:"1",unit_price:"1000",amount:"100",grade:"1등급",description:"gggg"}
-                ]
-            },
+		data:JSON.stringify({
+			order_amount:"60000000",
+			collect_money:"20000000",
+			subtract_amount:"10000000",
+			outstanding_amount:"30000000", 
+			description:"봉수네 상회 일 껄",
+			selling_partner:"2",
+			order_pk:"1",
+			order_item_list:[
+				{"id":"2","product":"1","grade":"1등급","unit_price":"1000","amount":"10","description":"기존 오더 아이템 id=2"},
+				{"id":"1","product":"2","grade":"2등급","unit_price":"2000","amount":"20","description":"기존 오더 아이템 id=1"},
+				{"id":"","product":"6","grade":"별 세개","unit_price":"3000","amount":"30","description":"신규 오더 아이템"}
+			]
+		}),
         csrfmiddlewaretoken: '{{ csrf_token }}'
     })
     .done(function(msg) {
-        alert("Data Saved : " + msg);
+		//No Item list : order item 이 하나도 지정 안되었을경우 return값, order는 update된다. 
+		//Product DoesNotExist : 등록시도하는 상품 없음, 
+		//SomeError : 알수 없는 에러 발생,  refresh or db로 부터 다시 data를 읽어와서 data정합성을 맞춘다.
+		//Order DoesNotExist : 잘못된 order id가 넘어옴. 
+        alert("Data Saved : " + msg.result);
     })
     .fail(function() {
         alert("failed");
     })
 }
-
 
 var order = {
     id:"1",

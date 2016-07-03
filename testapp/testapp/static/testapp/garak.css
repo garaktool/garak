@@ -814,7 +814,7 @@ z-index: 9999;
     text-align: right; }
     
    .mdl-data-table th {
-	padding: 0 15px 8px 15px !important; 
+	padding: 0 12px 0 0 !important; 
     text-align: right;    
    }
    
