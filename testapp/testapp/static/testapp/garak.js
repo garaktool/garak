@@ -222,7 +222,7 @@ $.ajaxSetup({
 
 
 function submit(form) {
-    url = "/submit_order"
+    url = "/submit_order";
 	
 	$.ajax({
         url: "/submit_order",
@@ -253,8 +253,36 @@ function submit(form) {
     })
     .fail(function() {
         alert("failed");
-    })
+    });
 }
+
+$('.overlay').on('click', function() {
+    console.log('omg');
+});
+
+
+var popup = {
+    status : "off",
+    overlay : document.getElementsByClassName('overlay'),
+    window : document.getElementsByClassName('popup'),
+    
+    init: function () {
+
+    },
+    
+    on: function(msg) {
+        $(popup.overlay).css('opacity', '0.7');
+        $(popup.overlay).css('z-index', '999');
+        $(popup.window).css('top', '50%');
+    },
+    
+    off: function() {
+        $(popup.overlay).css('opacity', '0');
+        $(popup.overlay).css('z-index', '9');
+        $(popup.window).css('top', '-50%');        
+    }
+};
+
 
 var order = {
     id:"1",
@@ -275,14 +303,14 @@ var order = {
         })
         .fail(function() {
             alert("failed");
-        })
+        });
     },
     
     fold: function(callback) {
         $('#order_table tbody').attr('style', 'height:200px');
         setTimeout(function() {
             var scroll_id_char = $('.table_highlight').attr('id');
-            $('#order_table_tbody').scrollTop(scroll_id_char.slice(-1) * 40 - 40)
+            $('#order_table_tbody').scrollTop(scroll_id_char.slice(-1) * 40 - 40);
         }, 310);
         order.status = 'fold';
         
@@ -303,7 +331,7 @@ var order = {
 
     }
     
-}
+};
 
 $(document).ready(function() {
 	$('.quick_code_set').on("click", function() {
@@ -355,7 +383,10 @@ $(document).ready(function() {
     
 // table toggle
     $(document).on("click", ".order_list td", function() {
-        if($(this).parent().hasClass('table_highlight')) {
+        if (order.status == "writing") {
+            console.log("writing");
+        } 
+        else if ($(this).parent().hasClass('table_highlight')) {
 		detail_close();
 		order.unfold();
         }
@@ -402,9 +433,11 @@ $(document).ready(function() {
 		$('.today').attr('placeholder', today);
         order.fold();
         
+        
         setTimeout(function() {
             $('#order_date').focus();
-        }, 350);
+            order.status = "writing";
+        }, 450);
 
 		}
     });
@@ -446,6 +479,7 @@ $(document).ready(function() {
 				detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
 				$('.order_progress').hide();
 				order_button_reset();
+				order.status = "fold";
 			} else {
 				alert('취소했지만 세이브 되었습니다.');
 			}
@@ -458,7 +492,7 @@ $(document).ready(function() {
 				detail_close();
 				$('.order_progress').hide();
 				order_button_reset();
-				alert('취소했습니다.');
+				order.unfold();
 			} else {
 				alert('취소를 취소하셨지만 취소 버튼을 누르셨으니 취소하겠습니다. 작성한 내용 다 삭제되지롱');
 			}
@@ -495,6 +529,7 @@ $(document).ready(function() {
 	   $('#calculate').hide(); 
 	   $('.calculate_progress').hide(); 
     });
+    
     
     
     
