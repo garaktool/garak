@@ -1,20 +1,68 @@
+// variables
+
+width = $(window).width();
+height = $(window).height();
+
+// global function
 function commas_checker(x) {
 	console.log('요거 만들어야 할듯');
 }
 
 function commas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function de_commas(x) {
 	return x.toString().split(',').join('');
 }
 
-function quick_submit() {
-	
-	
+function getCookie(name) {
+	var cookieValue = null;
+	if (document.cookie && document.cookie != '') {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = jQuery.trim(cookies[i]);
+			// Does this cookie string begin with the name we want?
+			if (cookie.substring(0, name.length + 1) == (name + '=')) {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
 }
+var csrftoken = getCookie('csrftoken');
 
+function csrfSafeMethod(method) {
+	// these HTTP methods do not require CSRF protection
+	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+	beforeSend: function(xhr, settings) {
+		if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		}
+	}
+});
+
+
+//actions
+
+$(document).on('click', '.overlay', function() {
+    popup.hide();
+});
+
+$(document).on('click', '.popup .confirm', function() {
+    popup.hide();
+})
+
+
+
+// quick_submit
+
+function quick_submit() {
+
+}
 
 function quick_input_add() {
 	$('#quick_input_list').append('<input class="sub_input" id="quick_product"><input class="sub_input" id="quick_price"><input class="sub_input" id="quick_quantity">');
@@ -24,6 +72,49 @@ function quick_input_set() {
 	quick_input_add();
 	
 }
+
+//submit
+
+function submit(form) {
+    url = "/submit_order"
+	
+	$.ajax({
+        url: "/submit_order",
+        cache: false,
+        method: "POST",
+		data:JSON.stringify({
+			order_total_amount:"60000000",
+			order_paid_amount:"20000000",
+			order_discounted_amount:"10000000",
+			order_outstanding_amount:"30000000", 
+			order_notes:"봉수네 TEST ORDER",
+			order_store:"2",
+			order_pk:"1",
+			ordered_item_list:[
+				{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"}
+			],
+			datepicker_start:"2016/07/01",
+			datepicker_end:"2016/07/03",
+			search_store:""
+		}),
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+    })
+    .done(function(msg) {
+		//No Item list : order item 이 하나도 지adsfasdf정 안되었을경우 return값, order는 update된다. 
+		//Product DoesNotExist : 등록시도하는 상품 없음, 
+		//SomeError : 알수 없는 에러 발생,  refresh or db로 부터 다시 data를 읽어와서 data정합성을 맞춘다.
+		//Order DoesNotExist : 잘못된 order id가 넘어옴. 
+
+		//msg.total_outstanding_amount1  => 정정당당 현재까지 미수금
+		//msg.total_outstanding_amount2  => 현재까지 전체 미수금
+        alert("Data Saved : " + msg.result);
+    })
+    .fail(function() {
+        alert("failed");
+    })
+}
+
+// order_table
 
 function detail_calc() {
 	total = $('.item_total');
@@ -191,70 +282,8 @@ function calculate_open() {
 
 	$('#calculate').show();
 }
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
 
 
-function submit(form) {
-    url = "/submit_order";
-	
-	$.ajax({
-        url: "/submit_order",
-        cache: false,
-        method: "POST",
-		data:JSON.stringify({
-			order_amount:"60000000",
-			collect_money:"20000000",
-			subtract_amount:"10000000",
-			outstanding_amount:"30000000", 
-			description:"봉수네 상회 일 껄",
-			selling_partner:"2",
-			order_pk:"1",
-			order_item_list:[
-				{"id":"2","product":"1","grade":"1등급","unit_price":"1000","amount":"10","description":"기존 오더 아이템 id=2"},
-				{"id":"1","product":"2","grade":"2등급","unit_price":"2000","amount":"20","description":"기존 오더 아이템 id=1"},
-				{"id":"","product":"6","grade":"별 세개","unit_price":"3000","amount":"30","description":"신규 오더 아이템"}
-			]
-		}),
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-    })
-    .done(function(msg) {
-		//No Item list : order item 이 하나도 지정 안되었을경우 return값, order는 update된다. 
-		//Product DoesNotExist : 등록시도하는 상품 없음, 
-		//SomeError : 알수 없는 에러 발생,  refresh or db로 부터 다시 data를 읽어와서 data정합성을 맞춘다.
-		//Order DoesNotExist : 잘못된 order id가 넘어옴. 
-        alert("Data Saved : " + msg.result);
-    })
-    .fail(function() {
-        alert("failed");
-    });
-}
 
 $('.overlay').on('click', function() {
     console.log('omg');
@@ -270,17 +299,32 @@ var popup = {
 
     },
     
-    on: function(msg) {
+    show: function(type, title, msg) {
         $(popup.overlay).css('opacity', '0.7');
         $(popup.overlay).css('z-index', '999');
-        $(popup.window).css('top', '50%');
+        $(popup.window).css('opacity', '1');
+        
+        $('.popup .title').text(title);
+        $('.popup .msg .text').text(msg);
+        $('.popup .action').find('.'+type).addClass('popup_show');
+        
     },
     
-    off: function() {
+    hide: function() {
         $(popup.overlay).css('opacity', '0');
-        $(popup.overlay).css('z-index', '9');
-        $(popup.window).css('top', '-50%');        
+        $(popup.overlay).css('z-index', '0');
+        $('.popup .action').find('.popup_show').removeClass('popup_show');
+        $(popup.window).css('opacity', '0');        
     }
+};
+
+var detail = {
+	status : "hide",
+
+	init: function() {
+
+	},
+
 };
 
 

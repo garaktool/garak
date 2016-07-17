@@ -76,10 +76,21 @@ WSGI_APPLICATION = 'testapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
+
+DATABASES_BACK = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'garak_db',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': 'rkfkr123',
     }
 }
 
@@ -106,15 +117,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
+#LANGUAGE_CODE = 'ko-kr'
 LANGUAGE_CODE = 'en-us'
+#TIME_ZONE = 'UTC'
+DATABASE_OPTIONS = {'charset': 'utf8'}
+TIME_ZONE = 'Asia/Seoul'
 
-TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
 
 
 # Static files (CSS, JavaScript, Images)

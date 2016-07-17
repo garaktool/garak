@@ -1,48 +1,58 @@
 from django.db import models
-from django.utils.deconstruct import deconstructible
 
-@deconstructible
-class Company(models.Model):
-	id = models.AutoField(primary_key=True)
-	name =  models.CharField(max_length=100,default=0)
-	call =  models.CharField(max_length=100,default=0)
-	address = models.CharField(max_length=200,default=0)
-	pic_name = models.CharField(max_length=200,default=0)
-	description = models.CharField(max_length=200,default=0)
+
+class Store(models.Model):
+	store_id = models.AutoField(primary_key=True)
+	store_name =  models.CharField(max_length=100,default=0)
+	store_call =  models.CharField(max_length=100,default=0)
+	store_address = models.CharField(max_length=200,default=0)
+	store_pic_name = models.CharField(max_length=200,default=0)
+	store_description = models.CharField(max_length=200,default=0)
 	def __unicode__(self):
-		return 'Company: ' + self.name 
+		return 'Store: ' + self.store_name 
 
-@deconstructible
-class Product(models.Model):
-	id = models.AutoField(primary_key=True)
-	unit =  models.CharField(max_length=100,default=0)
-	name =  models.CharField(max_length=100,default=0)
-	description = models.CharField(max_length=200,default=0)
+class Unit(models.Model):
+	unit_id = models.AutoField(primary_key=True)
+	unit_name =  models.CharField(max_length=100,default=0)
+	unit_description = models.CharField(max_length=200,default=0)
 	def __unicode__(self):
-		return 'Product: ' + self.name
+		return 'unit: ' + self.unit_name
 
-@deconstructible
+class Grade(models.Model):
+	grade_id = models.AutoField(primary_key=True)
+	grade_name =  models.CharField(max_length=100,default=0)
+	grade_description = models.CharField(max_length=200,default=0)
+	def __unicode__(self):
+		return 'grade: ' + self.grade_name
+
+class Item(models.Model):
+	item_id = models.AutoField(primary_key=True)
+	item_unit = models.ForeignKey(Unit,on_delete=models.SET_DEFAULT, default=100000)
+	item_name =  models.CharField(max_length=100,default=0)
+	item_description = models.CharField(max_length=200,default=0)
+	def __unicode__(self):
+		return 'item: ' + self.item_name
+
 class Order(models.Model):
-	id = models.AutoField(primary_key=True)
+	order_id = models.AutoField(primary_key=True)
 	order_date = models.DateTimeField('date ordered')
-	selling_partner =  models.ForeignKey(Company) 
-	order_amount = models.IntegerField(default=0)
-	collect_money = models.IntegerField(default=0) 
-	subtract_amount = models.IntegerField(default=0) 
-	outstanding_amount = models.IntegerField(default=0) 
-	description = models.CharField(max_length=200,default=0)
+	order_store =  models.ForeignKey(Store,default=100000,on_delete=models.SET_DEFAULT) 
+	order_total_amount = models.IntegerField(default=0)
+	order_paid_amount = models.IntegerField(default=0) 
+	order_discounted_amount = models.IntegerField(default=0) 
+	order_outstanding_amount = models.IntegerField(default=0) # nonpaid
+	order_notes = models.CharField(max_length=200,default=0)
 	def __unicode__(self):
-		return 'Order: ' + self.description
+		return 'Order: ' + self.order_notes
 
-@deconstructible
-class Order_item(models.Model):
-	id = models.AutoField(primary_key=True)
-	order = models.ForeignKey(Order, on_delete=models.CASCADE) 
-	product = models.ForeignKey(Product)
-	unit_price = models.IntegerField(default=0)
-	amount = models.IntegerField(default=0)
-	grade = models.CharField(max_length=200,default=0)
-	description = models.CharField(max_length=200,default=0)
-	
+class Ordered_item(models.Model):
+	ordered_item_id = models.AutoField(primary_key=True)
+	ordered_item_order = models.ForeignKey(Order, on_delete=models.CASCADE) 
+	ordered_item_item = models.ForeignKey(Item,default=100000,on_delete=models.SET_DEFAULT)
+	ordered_item_unit_price = models.IntegerField(default=0)
+	ordered_item_qty = models.IntegerField(default=0)
+	ordered_item_unit = models.ForeignKey(Unit,default=100000,on_delete=models.SET_DEFAULT)
+	ordered_item_grade = models.ForeignKey(Grade,default=100000,on_delete=models.SET_DEFAULT)
+	ordered_item_description = models.CharField(max_length=200,default=0)
 	def __unicode__(self):
-		return 'Order_item: ' + self.product.name
+		return 'Ordered_item: ' + self.ordered_item_description

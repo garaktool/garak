@@ -5,20 +5,61 @@
     position : absolute;
     background-color : #000;
     top : 0;
-    z-index : 9;
+    z-index : 0;
     opacity : 0;
     transition: all 0.35s cubic-bezier(0.4, 0, 1, 1);
 }
 
 .popup {
     position : absolute;
-    height : 200px;
     width : 300px;
-    top : -50%;
-    left : 50%;
-    background-color : #F5A623;
+    opacity : 0;
+    background-color : #5AAFEE;
     z-index : 9999;
+    border-radius : 15px;
     transition: all 0.35s cubic-bezier(0.4, 0, 1, 1);
+    left : 50%;
+    top : 50%;
+}
+
+.popup .title {
+    border-top-left-radius : 15px;
+    border-top-right-radius : 15px;
+    height : 40px;
+    line-height : 40px;
+    font-size : 13px;
+    color : #fff;
+    text-align : center;
+    font-weight : bold;
+}
+
+.popup .msg {
+    border-bottom-left-radius : 15px;
+    border-bottom-right-radius : 15px;
+    background-color : #fff;
+    padding : 15px;
+    font-size : 13px;
+    line-height : 1.6;
+}
+
+.popup .action {
+    height : 30px;
+    margin-top : 20px;
+}
+
+.popup .action .confirm {
+    width : 40px;
+    height : 30px;
+    line-height : 30px;
+    text-align : center;
+    margin : 0 auto;
+    background-color : #F5A623;
+    color : #FFF;
+}
+
+
+.popup_show {
+    display : block;
 }
 
 /** scroll **/
@@ -886,7 +927,7 @@ body .ui-widget-content {
 
 body .mdl-layout__container {
     height : initial;
-    z-index : 99;
+    z-index : 1;
 }
 
 body {
