@@ -1,11 +1,13 @@
 {% load staticfiles %}
 {% load humanize %}
-
+<!DOCTYPE html>
 <html class="mdl-js">
     <head>
         <title>
             GarakTool
         </title>
+
+        <meta name="viewport" content="initial-scale=1, width=device-width"/>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
         <link rel="stylesheet" type="text/css" href="{% static 'testapp/material.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'testapp/garak.css' %}" />
@@ -16,6 +18,7 @@
         <script src="{% static 'testapp/mdl-select.js' %}"></script>
         <script src="{% static 'testapp/garak.js' %}"></script>
         <script src="{% static 'testapp/jquery-ui.js' %}"></script>
+        <script src="{% static 'testapp/jquery.tabletojson.js' %}"></script>
         <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>    
 
         <script>
@@ -54,13 +57,28 @@
                 "농협"
                 ];
                 var code_ac = [
-                  "정정당당(001)",
-                  "중현야채(002)",
-                  "경석김치(004)"
+                    {% for store_loop in global_value.store_list %}
+                        {% if store_loop.store_code < 10 %}
+                        "{{store_loop.store_name}}(00{{store_loop.store_code}})",
+                        {% elif store_loop.store_code < 100 %}
+                        "{{store_loop.store_name}}(0{{store_loop.store_code}})",
+                        {% else %}
+                        "{{store_loop.store_name}}({{store_loop.store_code}})",
+                        {% endif %}
+                    {% endfor %}
                 ];
                 var product_code_ac = [
-                    "배추(001)",
-                    "무(002)"
+                    {% for item_loop in global_value.item_list %}
+                        {% if item_loop.item_code < 10 %}
+                            "{{item_loop.item_name}}(00{{item_loop.item_code}})",
+                        {% elif item_loop.item_code < 100 %}
+                            "{{item_loop.item_name}}(0{{item_loop.item_code}})",
+                        {% else %}
+                            "{{item_loop.item_name}}({{item_loop.item_code}})",
+                        {% endif %}
+                    {% endfor %}
+
+
                 ];
                 var product_grade_ac = [
                     "1급(1)",
@@ -238,7 +256,8 @@
 
                 <div class="garak_sorting">
                     모든내역 | 매출액순 | 미수금순 | 다른옵션
-                </div> 
+
+                </div>
         
         
         
@@ -286,232 +305,28 @@
                           <td data-role="value" class="unconsumed">{{ order_list.order_outstanding_amount}}</td>
                           <td data-role="value" class="note last_column">{{ order_list.order_notes}}</td>
                           <td data-role="value" class="item_list">
-                                {% for order_item in order_list.order_item_set.all %}
-                              <span data-role="item" class="{{order_item.order_item_id}}">{{order_item.store.store_name}},{{order_item.order_item_grade}},{{order_item.item.item_unit}},{{order_item.item_unit_price}},{{order_item.order_item_qty}},</span>
+                               {% for orderitem_loop in order_list.ordered_item_set.all %}
+								   <span data-itemcode="{{orderitem_loop.ordered_item_item.item_code}}" data-itemgrade="{{orderitem_loop.ordered_item_grade.grade_code}}" data-itemunit="{{orderitem_loop.ordered_item_unit.unit_code}}">
+								   {{orderitem_loop.ordered_item_item.item_name}}
+								   {% if orderitem_loop.ordered_item_item.item_code < 10 %}
+										(00{{orderitem_loop.ordered_item_item.item_code}})
+								   {% elif orderitem_loop.ordered_item_item.item_code < 100 %}
+										(0{{orderitem_loop.ordered_item_item.item_code}})
+									{% else %}
+										({{orderitem_loop.ordered_item_item.item_code}})
+								   {% endif %},
+
+								   {{orderitem_loop.ordered_item_grade.grade_name}}({{orderitem_loop.ordered_item_grade.grade_code}}),
+
+									{{orderitem_loop.ordered_item_unit.unit_name}}({{orderitem_loop.ordered_item_unit.unit_code}}),
+
+
+								   {{orderitem_loop.ordered_item_unit_price}},{{orderitem_loop.ordered_item_qty}},{{orderitem_loop.ordered_item_total_amount}}</span>
                               {% endfor %}
                           </td>                        
                         </tr>
                         {% endfor %}
 
-                        <tr data-role="order" class="order_list dummy_data pending" id="order_2">
-                          <td data-role="value" class="date">2015-08-07</td>
-                          <td data-role="value" class="code">정정당당(001)</td>
-                          <td data-role="value" class="kind">4</td>
-                          <td data-role="value" class="amount">40,000</td>
-                          <td data-role="value" class="collect">20,000</td>
-                          <td data-role="value" class="deduct">0</td>
-                          <td data-role="value" class="unconsumed">20,000</td>
-                          <td data-role="value" class="note last_column">8/24 국민은행 입금</td>
-                          <td data-role="value" class="item_list">
-                              <span>{{ product_info.name }},1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>
-                        </tr>
-                        
-                        <tr class="order_list dummy_data pending" id="order_3">
-                          <td class="date">2015-08-01</td>
-                          <td class="code">중현야채(002)</td>
-                          <td class="kind">5</td>
-                          <td class="amount">50,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">10,000</td>
-                          <td class="unconsumed">20,000</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>
-                          
-                        </tr> 
-                                               
-                        <tr class="order_list dummy_data pending" id="order_4">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">정정당당(001)</td>
-                          <td class="kind">3</td>
-                          <td class="amount">30,000</td>
-                          <td class="collect">0</td>
-                          <td class="deduct">0</td>
-                          <td class="unconsumed">30,000</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>
-                        </tr>
-                                                
-                        <tr class="order_list dummy_data complete" id="order_5">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">중현야채(002)</td>
-                          <td class="kind">2</td>
-                          <td class="amount">20,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">0</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">당일 현금처리</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>
-                        </tr>                      
-                          
-                        <tr class="order_list dummy_data complete" id="order_6">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete" id="order_7">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete" id="order_8">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
-                        
-                        <tr class="order_list dummy_data complete">
-                          <td class="date">2015-08-02</td>
-                          <td class="code">경석김치(004)</td>
-                          <td class="kind">4</td>
-                          <td class="amount">40,000</td>
-                          <td class="collect">20,000</td>
-                          <td class="deduct">20,000</td>
-                          <td class="unconsumed">0</td>
-                          <td class="note last_column">8/24 국민은행 입금</td>
-                          <td class="item_list">
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                          </td>                          
-                        </tr>
                         <tr class="order_list dummy_data complete">
                           <td class="date">2015-08-02</td>
                           <td class="code">경석김치(004)</td>
@@ -534,24 +349,27 @@
                 </div>
                 
                 <div id="sub_table">
+                    <form class="sub_table_form" id="sub_table_form" name="sub_table_form" method="post" target="/submit_order">
+
                     <div class="garak_table_title">
-                        <!-- <i class="material-icons">view_module</i> --><div style="padding-left : 15px;">상세수주내역</div>
-                                                <div class="gara_table_export">
-                            <span>엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
+                        <!-- <i class="material-icons">view_module</i> -->
+                        <div style="padding-left : 15px;">상세수주내역</div>
+                            <div class="gara_table_export">
+                                <span>엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
                         </div>
                     </div>
                     <div class="sub_table_wrapper clear">
                         <div class="detail_view_date">
-                            <span>매출일 : <input id="order_date" class="date today detail_table" onkeypress="set_today(event);"></span> <span style="margin-left:25px;">매출처 : <input id="company_code" onkeypress="set_company(event);" class="code detail_table"></span>
+                            <span>매출일 : <input id="order_date" name="order_date" class="date today detail_table" onkeypress="set_today(event);"></span> <span style="margin-left:25px;">매출처 : <input id="company_code" name="order_store" onkeypress="set_company(event);" class="code detail_table"></span>
                         </div>
                         <table id="item_table" class="garak_table sub_left mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
                           <thead>
                             <tr class="top_radius">
-                              <th>품목(코드)</th>
-                              <th>등급</th>
-                              <th>단위</th>
-                              <th>단가</th>
-                              <th>수량</th>
+                              <th data-override="ordered_item_item">품목(코드)</th>
+                              <th data-override="ordered_item_grade">등급</th>
+                              <th data-override="ordered_item_unit">단위</th>
+                              <th data-override="ordered_item_unit_price">단가</th>
+                              <th data-override="ordered_item_qty">수량</th>
                               <th class="new_item_container">
                               매출액
                               </th>
@@ -559,23 +377,23 @@
                             <tr class="input_section">
                                 <td></td>
                                 <td id="product_code" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_code_input" onkeypress="enterTab(event);">
+                                    <input class="mdl-textfield__input" type="text" id="product_code_input" name="ordered_item_item" onkeypress="enterTab(event);"> <!--  INPUT창에 있는 name이 하위로 옮겨가야함 -->
                                     <label class="mdl-textfield__label" for="product_code_input">품목(코드)</label>
                                 </td>
                                 <td id="product_grade" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_grade_input" onkeypress="enterTab(event);">
+                                    <input class="mdl-textfield__input" type="text" id="product_grade_input" name="ordered_item_grade" onkeypress="enterTab(event);">
                                     <label class="mdl-textfield__label" for="product_grade_input">1급(1)</label>
                                 </td>
                                 <td id="product_unit" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_unit_input" onkeypress="enterTab(event);">
+                                    <input class="mdl-textfield__input" type="text" id="product_unit_input" name="ordered_item_unit" onkeypress="enterTab(event);">
                                     <label class="mdl-textfield__label" for="product_unit_input">박스(1)</label>
                                 </td>
                                 <td id="product_price" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_price_input" onkeypress="enterTab(event);">
+                                    <input class="mdl-textfield__input" type="text" id="product_price_input" name="ordered_item_unit_price" onkeypress="enterTab(event);">
                                     <label class="mdl-textfield__label" for="product_price_input">0</label>
                                 </td>
                                 <td id="product_quantity" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_quantity_input"  onkeypress="enterTab(event);">
+                                    <input class="mdl-textfield__input" type="text" id="product_quantity_input" name="ordered_item_qty" onkeypress="enterTab(event);">
                                     <label class="mdl-textfield__label" for="product_quantity_input">1</label>
                                 </td>
                                 <td id="product_amount" class="mdl-textfield mdl-js-textfield garak_table_input last_column">
@@ -603,18 +421,18 @@
         
                                     <tr>
                                         <td>
-                                            <span>매출액 : </span><input class="amount"></input>
+                                            <span>매출액 : </span><input class="amount" name="order_total_amount"></input>
                                         </td>
                                         <td>    
-                                            수금날짜 : <input id="income_date">
+                                            수금날짜 : <input id="income_date" name="order_adjustment_date">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            수금액 : <input class="collect">
+                                            수금액 : <input class="collect" name="order_paid_amount">
                                         </td>
                                         <td>    
-                                            수금형태 : <select>
+                                            수금형태 : <select name="order_adjustment_type">
                                             <option value="1">입금</option>
                                             <option value="2">외상</option>
                                             <option value="3">현금</option>
@@ -623,23 +441,23 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            공제액 : <input class="deduct">
+                                            공제액 : <input class="deduct" name="order_discounted_amount" >
                                         </td>
                                         <td>    
-                                            수금은행 : <input id="bank">
+                                            수금은행 : <input id="bank" name="adjustment_bank">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            미수금 : <input class="unconsumed">
+                                            미수금 : <input class="unconsumed" name="order_outstanding_amount">
                                         </td>
                                         <td>    
-                                            수금상태 : <span class="status"></span>
+                                            수금상태 : <span class="status" name="order_adjustment_state"></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            비  고 : <input class="note">
+                                            비  고 : <input class="note" name="adjustment_notes">
                                         </td>
         <!--
                                         <td>    
@@ -654,7 +472,7 @@
                                      저장
                             <span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 156.491px; height: 156.491px; transform: translate(-50%, -50%) translate(40px, 18px);"></span></span></button>
 
-<button id="detail_cancel" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn" data-upgraded=",MaterialButton,MaterialRipple">
+                                <button id="detail_cancel" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn" data-upgraded=",MaterialButton,MaterialRipple">
                                      취소
                             <span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 156.491px; height: 156.491px; transform: translate(-50%, -50%) translate(40px, 18px);"></span></span></button>                               
                             </div>
@@ -662,7 +480,7 @@
                     </div>
                 
                 </div>
-
+            </form>
         
             </div> <!-- end of section -->
     

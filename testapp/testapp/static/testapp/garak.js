@@ -76,27 +76,38 @@ function quick_input_set() {
 //submit
 
 function submit(form) {
-    url = "/submit_order"
-	
+	frm = $('#'+form);
+	url = $(frm).attr('target');
+    // url = "/submit_order";
+	var form_data = $('form').serializeArray();
+	var item_data = $('#item_table').tableToJSON({
+		ignoreColumns: [0,6]
+	});
+	data = JSON.stringify(form_data) + "ordered_item_list:" + JSON.stringify(item_data);
+
+	console.log(data)
 	$.ajax({
         url: "/submit_order",
         cache: false,
         method: "POST",
-		data:JSON.stringify({
-			order_total_amount:"60000000",
-			order_paid_amount:"20000000",
-			order_discounted_amount:"10000000",
-			order_outstanding_amount:"30000000", 
-			order_notes:"봉수네 TEST ORDER",
-			order_store:"2",
-			order_pk:"1",
-			ordered_item_list:[
-				{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"}
-			],
-			datepicker_start:"2016/07/01",
-			datepicker_end:"2016/07/03",
-			search_store:""
-		}),
+		// data:JSON.stringify({
+		// 	order_total_amount:"60000000",
+		// 	order_paid_amount:"20000000",
+		// 	order_discounted_amount:"10000000",
+		// 	order_outstanding_amount:"30000000",
+		// 	order_notes:"봉수네 TEST ORDER2",
+		// 	order_store:"2",
+		// 	order_pk:"2",
+		// 	ordered_item_list:[
+		// 		{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
+		// 		{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
+		// 		{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"}
+		// 	],
+		// 	datepicker_start:"2016/07/01",
+		// 	datepicker_end:"2016/07/03",
+		// 	search_store:""
+		// }),
+		data : JSON.stringify(form_data),
         csrfmiddlewaretoken: '{{ csrf_token }}'
     })
     .done(function(msg) {
@@ -110,7 +121,11 @@ function submit(form) {
         alert("Data Saved : " + msg.result);
     })
     .fail(function() {
-        alert("failed");
+        popup.show("confirm","전송오류","전송이 실패했습니다. 같은 문제가 반복적으로 발생될 경우 고객센터로 문의바랍니다.");
+		// location.reload(true);
+		setTimeout(function () {
+			// window.location.reload(true);
+		},5000);
     })
 }
 
@@ -121,7 +136,7 @@ function detail_calc() {
 	total_price = Number('0');
 	for(i=0;i<total.length;i++) {
 		total_price = total_price + Number(de_commas($(total[i]).text()));
-		console.log(total_price);
+
 		}
 	
 	collect = de_commas($('#detail_table .collect').val());
@@ -173,9 +188,12 @@ function detail_open(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 	item_list_table_init();
 	item_list = $('.table_highlight .item_list span');
 	for(i=0;i<item_list.length;i++) {
-		item_data = $(item_list[i]).text().split(',');
-		console.log(item_data);
-		$('#item_list_table').append('<tr><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td>'+item_data[0]+'</td><td>'+item_data[1]+'</td><td>'+item_data[2]+'</td><td>'+commas(item_data[3])+'</td><td>'+commas(item_data[4])+'</td><td class="item_total">'+commas(item_data[5])+'</td></tr>');
+		var item_data = $(item_list[i]).text().split(',');
+		var item_no = $(item_list[i]).attr('data-itemcode');
+		var item_grade = $(item_list[i]).attr('data-itemgrade');
+		var item_unit = $(item_list[i]).attr('data-itemunit');
+
+		$('#item_list_table').append('<tr><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td data-override="'+item_no+'">'+item_data[0]+'</td><td data-override="'+item_grade+'">'+item_data[1]+'</td><td data-override="'+item_unit+'">'+item_data[2]+'</td><td>'+commas(item_data[3])+'</td><td>'+commas(item_data[4])+'</td><td class="item_total">'+commas(item_data[5])+'</td></tr>');
 	}
 	
 
@@ -195,7 +213,32 @@ function detail_open(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 
 }
 
+function detail_item() {
+
+}
+
 function detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status) {
+	item_list = $('#item_list_table tr');
+	item_list_td = [];
+	items = "";
+	for(var i = 0 ;i < item_list.length; i++) {
+		item_list_td[i] = $(item_list[i]).find('td');
+		var data_itemcode = $(item_list_td[i][1]).attr('data-override');
+		var data_itemgrade = $(item_list_td[i][2]).attr('data-override');
+		var data_itemunit = $(item_list_td[i][3]).attr('data-override');
+		var item_item = $(item_list_td[i][1]).text();
+		var item_grade = $(item_list_td[i][2]).text();
+		var item_unit= $(item_list_td[i][3]).text();
+		var item_unit_price = $(item_list_td[i][4]).text();
+		var item_qty = $(item_list_td[i][5]).text();
+		var item_total = $(item_list_td[i][6]).text();
+
+		items = items + '<span data-itemcode="'+data_itemcode+'" data-itemgrade="'+data_itemgrade+'" data-itemunit="'+data_itemunit+'">'+item_item+','+item_grade+','+item_unit+','+de_commas(item_unit_price)+','+item_qty+','+de_commas(item_total)+'</span>';
+		console.log(items);
+	}
+
+	submit('sub_table_form');
+
 	$('.table_highlight .date').text(date);
 	$('.table_highlight .code').text(code);
 	$('.table_highlight .kind').text(kind);
@@ -204,6 +247,7 @@ function detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 	$('.table_highlight .deduct').text(commas(deduct));
 	$('.table_highlight .unconsumed').text(commas(unconsumed));
 	$('.table_highlight .note').text(note);
+	$('.table_highlight .item_list').html(items);
 	if(unconsumed < 1) {
 		$('.table_highlight').removeClass('pending');
 		$('.table_highlight').addClass('complete');
@@ -213,6 +257,7 @@ function detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 		$('.table_highlight').removeClass('complete');
 		
 	}
+
 	
 /* 	$('.table_highlight .status').text(status); */				
 }
@@ -254,25 +299,30 @@ function set_today() {
 }
 
 
-function enterTab() {
+function enterTab(e) {
+
 	if(event.keyCode == 13)
     	 {
+			 e.preventDefault();
 				 var inputs = $('.focus').closest('tr').find(':input');
 				 inputs.eq( inputs.index($('.focus'))+ 1 ).focus();
 		  }
 }
 
-function enterKeySubmit() {
-
+function enterKeySubmit(e) {
+	e.preventDefault();
 	if(event.keyCode == 13)
     	 {
-    	 	code = $('#product_code input').val();
-    	 	grade = $('#product_grade input').val();
-    	 	unit = $('#product_unit input').val();
-    	 	price = $('#product_price input').val();
-    	 	quantity = $('#product_quantity input').val();
-    	 	amount = $('#product_amount input').val();
-			 $('#item_table > tbody:first').prepend('<tr><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td>'+code+'</td><td>'+grade+'</td><td>'+unit+'</td><td>'+commas(price)+'</td><td>'+quantity+'</td><td class="item_total">'+commas(amount)+'</td></tr>');    
+    	 	var code = $('#product_code input').val();
+			var code_code = parseInt(code.match(/\(([^)]+)\)/)[1]);
+    	 	var grade = $('#product_grade input').val();
+			var grade_code = parseInt(grade.match(/\(([^)]+)\)/)[1]);
+    	 	var unit = $('#product_unit input').val();
+			var unit_code = parseInt(unit.match(/\(([^)]+)\)/)[1]);
+    	 	var price = $('#product_price input').val();
+    	 	var quantity = $('#product_quantity input').val();
+    	 	var amount = $('#product_amount input').val();
+			 $('#item_table > tbody:first').prepend('<tr><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td data-override="'+code_code+'">'+code+'</td><td data-override="'+grade_code+'">'+grade+'</td><td data-override="'+unit_code+'">'+unit+'</td><td>'+commas(price)+'</td><td>'+quantity+'</td><td class="item_total">'+commas(amount)+'</td></tr>');
 			 input_init();  
 			 detail_calc();
 		  }
@@ -405,11 +455,11 @@ $(document).ready(function() {
 
 	$('#product_amount_input').on("focusin", function() {
 		price = $('#product_price_input').val();
-		console.log(price);
+
 		quantity = $('#product_quantity_input').val();
-		console.log(quantity);
+
 		amount = price * quantity;
-		console.log(amount);
+
 		$('#product_amount_input').val(amount);
 	});
 
@@ -506,7 +556,8 @@ $(document).ready(function() {
     });
   
   
-  $('#detail_confirm').on("click", function() {
+  $('#detail_confirm').on("click", function(e) {
+	  		e.preventDefault();
 	        date = $('#sub_table .date').val();
             code = $('#sub_table .code').val();
 			kind = $('#item_table tr').length - 2;
@@ -516,30 +567,41 @@ $(document).ready(function() {
 			unconsumed = $('#sub_table .unconsumed').val();
 			note = $('#sub_table .note').val();
 			status = $('#sub_table .status').text();
+
+	  		detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
+			$('.order_progress').hide();
+			order.status = "fold";
 			
 			
-			if (confirm('세이브 하시면 후회하실텐데, 그래도 세이브 하시겠어요?')) {
-				alert('세이브 되었습니다.');
-				detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
-				$('.order_progress').hide();
-				order_button_reset();
-				order.status = "fold";
-			} else {
-				alert('취소했지만 세이브 되었습니다.');
-			}
+			// if (confirm('세이브 하시면 후회하실텐데, 그래도 세이브 하시겠어요?')) {
+			// 	alert('세이브 되었습니다.');
+			// 	detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
+			// 	$('.order_progress').hide();
+			// 	order_button_reset();
+			// 	order.status = "fold";
+			// } else {
+			// 	alert('취소했지만 세이브 되었습니다.');
+			// }
 
   });
 
-  $('#detail_cancel').on("click", function() {
-			if (confirm('작성한 내용이 다 삭제됩니다. 취소 하시겠습니까?')) {
-				$('.table_highlight').remove();
-				detail_close();
-				$('.order_progress').hide();
-				order_button_reset();
-				order.unfold();
-			} else {
-				alert('취소를 취소하셨지만 취소 버튼을 누르셨으니 취소하겠습니다. 작성한 내용 다 삭제되지롱');
-			}
+  $('#detail_cancel').on("click", function(e) {
+	  e.preventDefault();
+	  $('.table_highlight').remove();
+	  detail_close();
+	  $('.order_progress').hide();
+	  order_button_reset();
+	  order.unfold();
+
+	  // if (confirm('작성한 내용이 다 삭제됩니다. 취소 하시겠습니까?')) {
+		// 		$('.table_highlight').remove();
+		// 		detail_close();
+		// 		$('.order_progress').hide();
+		// 		order_button_reset();
+		// 		order.unfold();
+		// 	} else {
+		// 		alert('취소를 취소하셨지만 취소 버튼을 누르셨으니 취소하겠습니다. 작성한 내용 다 삭제되지롱');
+		// 	}
 	  
   });
     

@@ -453,6 +453,7 @@ table tr:last-child td:last-child {
     max-width : 910px;
     table-layout: fixed;
     margin : 0 auto 20px auto;
+    overflow : hidden;
 }
 
 .garak_table td {

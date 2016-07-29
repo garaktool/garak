@@ -22,14 +22,21 @@ def index(request):
 #order page
 def order(request):
 	order_info=[]
+	global_value={}
 	try:
 		#order_info = Order.objects.get(pk=order_id)
-		order_info = Order.objects.order_by('-order_date')[:10]
-		
+		#order_info = Order.objects.order_by('-order_date')[:20]
+		order_info = Order.objects.order_by('-order_date')
+		global_value['store_list'] = Store.objects.order_by("store_code")
+		global_value['item_list'] =  Item.objects.order_by("item_code")
+		global_value['unit_list'] =  Unit.objects.order_by("unit_code")
+		global_value['grade_list'] =  Grade.objects.order_by("grade_code")
+
 	except Order.DoesNotExist:
 		raise Http404("Order does not exist")
 
-	return render(request, 'testapp/order.html', {'order_info': order_info})
+	
+	return render(request, 'testapp/order.html', {'order_info': order_info,'global_value':global_value})
 
 
 def submit_order(request):
@@ -139,6 +146,7 @@ def insert_order(order_data):
 	result={}
 	try:
 		order_store = Store.objects.get(store_id=order_data['order_store'])
+
 		order_info = Order(
 			order_date=timezone.now(), 
 			order_total_amount=order_data['order_total_amount'],
@@ -146,14 +154,15 @@ def insert_order(order_data):
 			order_discounted_amount=order_data['order_discounted_amount'],
 			order_outstanding_amount=order_data['order_outstanding_amount'],
 			order_notes=order_data['order_notes'])
-		order_info.order_soter=order_store
+		order_info.order_store=order_store
 		order_info.save()
 		result['message'] = 'success'
 		result['data']=order_info
 	except Store.DoesNotExist:
 		result['message'] = 'Store DoesNotExist'
-	except :# error 발생시 
+	except Exception as e:# error 발생시 
 		result['message'] = 'SomeError_insert'
+		print e
 	
 	return result
 
