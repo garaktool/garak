@@ -75,39 +75,48 @@ function quick_input_set() {
 
 //submit
 
-function submit(form) {
-	frm = $('#'+form);
+function detail_submit() {
+	frm = $('#sub_table_form');
 	url = $(frm).attr('target');
-    // url = "/submit_order";
-	var form_data = $('form').serializeArray();
-	var item_data = $('#item_table').tableToJSON({
-		ignoreColumns: [0,6]
-	});
-	data = JSON.stringify(form_data) + "ordered_item_list:" + JSON.stringify(item_data);
+	item_table = $('#item_list_table tr');
 
-	console.log(data)
+	// var form_data = $('form').serializeArray();
+		item_data = $('#item_table').tableToJSON({
+			ignoreColumns: [0,6],
+			ignoreEmptyRows: true
+		});
+	item_data.shift();
+	var pk = $('.table_highlight').attr('id').split('_')[1];
+
+	// data = JSON.stringify(form_data) + "ordered_item_list:" + JSON.stringify(item_data);
+
+
+
 	$.ajax({
-        url: "/submit_order",
+        url: $(frm).attr('target'),
         cache: false,
         method: "POST",
-		// data:JSON.stringify({
-		// 	order_total_amount:"60000000",
-		// 	order_paid_amount:"20000000",
-		// 	order_discounted_amount:"10000000",
-		// 	order_outstanding_amount:"30000000",
-		// 	order_notes:"봉수네 TEST ORDER2",
-		// 	order_store:"2",
-		// 	order_pk:"2",
-		// 	ordered_item_list:[
-		// 		{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
-		// 		{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
-		// 		{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"}
-		// 	],
-		// 	datepicker_start:"2016/07/01",
-		// 	datepicker_end:"2016/07/03",
-		// 	search_store:""
-		// }),
-		data : JSON.stringify(form_data),
+		 data:JSON.stringify({
+			 order_pk:pk,
+			order_total_amount:de_commas($('#detail_table #order_total_amount').val()),
+			order_paid_amount:de_commas($('#detail_table #order_paid_amount').val()),
+			order_discounted_amount:de_commas($('#detail_table #order_discounted_amount').val()),
+			order_outstanding_amount:de_commas($('#detail_table #order_outstanding_amount').val()),
+			order_notes:de_commas($('#detail_table #adjustment_notes').val()),
+			order_store:$('#company_code').val(),
+			// ordered_item_list:[
+			// 	{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
+			// 	{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
+			// 	{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"}
+			// ],
+			 ordered_item_list : item_data,
+
+			datepicker_start:"2016/07/01",
+			datepicker_end:"2016/07/03",
+			search_store:""
+		}),
+
+
         csrfmiddlewaretoken: '{{ csrf_token }}'
     })
     .done(function(msg) {
@@ -118,6 +127,7 @@ function submit(form) {
 
 		//msg.total_outstanding_amount1  => 정정당당 현재까지 미수금
 		//msg.total_outstanding_amount2  => 현재까지 전체 미수금
+
         alert("Data Saved : " + msg.result);
     })
     .fail(function() {
@@ -237,7 +247,8 @@ function detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 		console.log(items);
 	}
 
-	submit('sub_table_form');
+	// submit('sub_table_form');
+	detail_submit();
 
 	$('.table_highlight .date').text(date);
 	$('.table_highlight .code').text(code);
