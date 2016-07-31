@@ -12,5 +12,9 @@ urlpatterns = [
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^$', views.index, name='index'),
 	url(r'^order$', views.order, name='order'),
+	url(r'^item_control$', views.item_control, name='item_control'),
+	url(r'^grade_control$', views.grade_control, name='grade_control'),
+	url(r'^unit_control$', views.unit_control, name='unit_control'),
+	url(r'^store_control$', views.store_control, name='store_control'),
 	url(r'^submit_order$', views.submit_order, name='submit_order'),
 ]

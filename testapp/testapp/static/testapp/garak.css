@@ -422,7 +422,7 @@ table tr:last-child td:last-child {
 	display : none;
 	position: absolute;
 	z-index: 9;
-	width : 834px;
+	width : 850px;
 	height : 40px;
 	line-height : 42px;
 	top : 80px;
@@ -448,7 +448,8 @@ table tr:last-child td:last-child {
 
 #main_table .garak_table {
 	border : 0 !important;
-	border-radius : 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
     width : 910px;
     max-width : 910px;
     table-layout: fixed;
@@ -586,7 +587,7 @@ tr:nth-child(even) {
 }
 
 #main_table th:nth-child(9), #main_table td:nth-child(9) {
-    width : 237px;
+    width : 240px;
 }
 
 #main_table .pending td:nth-child(8), #main_table .pending td:nth-child(9) {

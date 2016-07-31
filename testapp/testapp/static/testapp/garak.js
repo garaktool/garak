@@ -76,6 +76,7 @@ function quick_input_set() {
 //submit
 
 function detail_submit() {
+	console.log('a');
 	frm = $('#sub_table_form');
 	url = $(frm).attr('target');
 	item_table = $('#item_list_table tr');
@@ -103,7 +104,8 @@ function detail_submit() {
 			order_discounted_amount:de_commas($('#detail_table #order_discounted_amount').val()),
 			order_outstanding_amount:de_commas($('#detail_table #order_outstanding_amount').val()),
 			order_notes:de_commas($('#detail_table #adjustment_notes').val()),
-			order_store:$('#company_code').val(),
+			// order_store:$('#company_code').val(),
+			 order_store_code : 2,
 			// ordered_item_list:[
 			// 	{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
 			// 	{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
@@ -114,6 +116,9 @@ function detail_submit() {
 			datepicker_start:"2016/07/01",
 			datepicker_end:"2016/07/03",
 			search_store:""
+
+
+
 		}),
 
 
@@ -415,7 +420,8 @@ var order = {
         $('#order_table tbody').attr('style', 'height:200px');
         setTimeout(function() {
             var scroll_id_char = $('.table_highlight').attr('id');
-            $('#order_table_tbody').scrollTop(scroll_id_char.slice(-1) * 40 - 40);
+			var tr_index = $("#order_table_tbody > tr").index($("#order_table_tbody > tr.table_highlight"));
+            $('#order_table_tbody').scrollTop(tr_index * 40 );
         }, 310);
         order.status = 'fold';
         
@@ -487,36 +493,67 @@ $(document).ready(function() {
     });
     
 // table toggle
-    $(document).on("click", ".order_list td", function() {
-        if (order.status == "writing") {
-            console.log("writing");
-        } 
-        else if ($(this).parent().hasClass('table_highlight')) {
-		detail_close();
-		order.unfold();
-        }
-        else {
+//     $(document).on("click", ".order_list td", function() {
+//         if (order.status == "writing") {
+//             console.log("writing");
+//         }
+//         else if ($(this).parent().hasClass('table_highlight')) {
+// 		detail_close();
+// 		order.unfold();
+//         }
+//         else {
+// 			detail_close();
+//             $(this).parent().addClass('table_highlight');
+//             date = $(this).parent().find('.date').text();
+//             code = $(this).parent().find('.code').text();
+// 			kind = $(this).parent().find('.kind').text();
+// 			amount = $(this).parent().find('.amount').text();
+// 			collect = $(this).parent().find('.collect').text();
+// 			deduct = $(this).parent().find('.deduct').text();
+// 			unconsumed = $(this).parent().find('.unconsumed').text();
+// 			note = $(this).parent().find('.note').text();
+// 			status = '수금대기';
+// 			if($(this).parent().hasClass('complete')) {
+// 				status = '수금완료';
+// 			}
+//
+//             detail_open(date,code,kind,amount,collect,deduct,unconsumed,note,status);
+//             if(order.status == 'unfold') {
+//                 order.fold();
+//             }
+//         }
+//     });
+
+	$(document).on("click", "tr.order_list", function() {
+		if (order.status == "writing") {
+			console.log("writing");
+		}
+		else if ($(this).hasClass('table_highlight')) {
 			detail_close();
-            $(this).parent().addClass('table_highlight');
-            date = $(this).parent().find('.date').text();
-            code = $(this).parent().find('.code').text();
-			kind = $(this).parent().find('.kind').text();
-			amount = $(this).parent().find('.amount').text();
-			collect = $(this).parent().find('.collect').text();
-			deduct = $(this).parent().find('.deduct').text();
-			unconsumed = $(this).parent().find('.unconsumed').text();
-			note = $(this).parent().find('.note').text();
+			order.unfold();
+		}
+		else {
+			detail_close();
+			$(this).addClass('table_highlight');
+			date = $(this).find('.date').text();
+			code = $(this).find('.code').text();
+			kind = $(this).find('.kind').text();
+			amount = $(this).find('.amount').text();
+			collect = $(this).find('.collect').text();
+			deduct = $(this).find('.deduct').text();
+			unconsumed = $(this).find('.unconsumed').text();
+			note = $(this).find('.note').text();
 			status = '수금대기';
-			if($(this).parent().hasClass('complete')) {
+			if($(this).hasClass('complete')) {
 				status = '수금완료';
 			}
-			
-            detail_open(date,code,kind,amount,collect,deduct,unconsumed,note,status);
-            if(order.status == 'unfold') {
-                order.fold();
-            }
-        }
-    });
+
+			detail_open(date,code,kind,amount,collect,deduct,unconsumed,note,status);
+			if(order.status == 'unfold') {
+				order.fold();
+			}
+		}
+	});
     
     $('.garak_drawer').html("<span>Garak</span><span>Tool</span>");
     
@@ -529,7 +566,7 @@ $(document).ready(function() {
     	detail_close();
     	$(this).addClass('progress');
     	$('#new_order').html('입력중<span>.</span><span>.</span><span>.</span>');
-        $('#order_table > tbody:first').prepend('<tr class="order_list table_highlight"><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td class="date"></td><td class="code"></td><td class="kind"></td><td class="amount"></td><td class="collect"></td><td class="deduct"></td><td class="unconsumed"></td><td class="note last_column"></td></tr>');
+        $('#order_table > tbody:first').prepend('<tr class="order_list table_highlight" id="order_"><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td class="date"></td><td class="code"></td><td class="kind"></td><td class="amount"></td><td class="collect"></td><td class="deduct"></td><td class="unconsumed"></td><td class="note last_column"></td></tr>');
         detail_new();
 		$('.order_progress').show();        
 // 		input_init();

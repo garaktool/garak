@@ -222,7 +222,7 @@
                         </div>                        
                     </div>
                 </div>
-                <div id="quick_input" class="quick_input">
+                <div id="quick_input" class="quick_input" style="display:none;">
                     <input pattern="(\d{3})([\.])(\d{2})"></input>
                     <input id="quick_code" onkeypress="quick_code_set(event);" placeholder="코드">
                                         <button id="quick_submit" class="quick_code_set">입력</button>
@@ -377,15 +377,15 @@
                             <tr class="input_section">
                                 <td></td>
                                 <td data-override=" " id="product_code" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_code_input" name="ordered_item_item" onkeypress="enterTab(event);"> <!--  INPUT창에 있는 name이 하위로 옮겨가야함 -->
+                                    <input class="mdl-textfield__input" type="text" id="product_code_input" name="ordered_item_item_code" onkeypress="enterTab(event);"> <!--  INPUT창에 있는 name이 하위로 옮겨가야함 -->
                                     <label data-override=" " class="mdl-textfield__label" for="product_code_input">품목(코드)</label>
                                 </td>
                                 <td data-override=" " id="product_grade" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_grade_input" name="ordered_item_grade" onkeypress="enterTab(event);">
+                                    <input class="mdl-textfield__input" type="text" id="product_grade_input" name="ordered_item_grade_code" onkeypress="enterTab(event);">
                                     <label class="mdl-textfield__label" for="product_grade_input">1급(1)</label>
                                 </td>
                                 <td data-override=" " id="product_unit" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                    <input class="mdl-textfield__input" type="text" id="product_unit_input" name="ordered_item_unit" onkeypress="enterTab(event);">
+                                    <input class="mdl-textfield__input" type="text" id="product_unit_input" name="ordered_item_unit_code" onkeypress="enterTab(event);">
                                     <label class="mdl-textfield__label" for="product_unit_input">박스(1)</label>
                                 </td>
                                 <td data-override=" " id="product_price" class="mdl-textfield mdl-js-textfield garak_table_input">

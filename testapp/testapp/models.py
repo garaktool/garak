@@ -81,7 +81,7 @@ class Order(models.Model):
 	order_discounted_amount = models.IntegerField(default=0) 
 	order_outstanding_amount = models.IntegerField(default=0) # nonpaid
 	order_notes = models.CharField(max_length=200,default=0)
-	order_adjustment_id= models.ForeignKey(Adjustment,default=None,on_delete=models.SET_DEFAULT)
+	order_adjustment_id= models.IntegerField(default=0)
 	order_adjustment_state = models.CharField(max_length=20,default=0)
 	order_adjustment_type = models.CharField(max_length=20,default=0)
 	order_adjustment_date = models.DateTimeField('date adjusted',default=datetime.now())
