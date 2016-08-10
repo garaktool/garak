@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime 
+from django.db.models import Max
 
 class Store(models.Model):
 	store_id = models.AutoField(primary_key=True)
@@ -58,7 +59,8 @@ class Item(models.Model):
 	
 	def save(self): 
 		max_code_number=Item.objects.all().aggregate(Max('item_code'))
-		self.item_code=max_code_number+1
+		if self.item_code <1:
+			self.item_code=max_code_number+1
 		super(Item, self).save()
 
 class Adjustment(models.Model):
@@ -81,7 +83,7 @@ class Order(models.Model):
 	order_discounted_amount = models.IntegerField(default=0) 
 	order_outstanding_amount = models.IntegerField(default=0) # nonpaid
 	order_notes = models.CharField(max_length=200,default=0)
-	order_adjustment_id= models.ForeignKey(Adjustment,default=None,on_delete=models.SET_DEFAULT)
+	order_adjustment_id= models.IntegerField(default=0)
 	order_adjustment_state = models.CharField(max_length=20,default=0)
 	order_adjustment_type = models.CharField(max_length=20,default=0)
 	order_adjustment_date = models.DateTimeField('date adjusted',default=datetime.now())

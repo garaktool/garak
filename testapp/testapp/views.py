@@ -5,6 +5,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import generic
+from django.db.models import Max
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.db import transaction
@@ -35,10 +36,9 @@ def order(request):
 	except Order.DoesNotExist:
 		raise Http404("Order does not exist")
 
-	
 	return render(request, 'testapp/order.html', {'order_info': order_info,'global_value':global_value})
 
-
+#order control page
 def submit_order(request):
 	response_data={}
 	response_data['result'] = 'failed'
@@ -46,6 +46,7 @@ def submit_order(request):
 	order_data = json.loads(request.body)
 	if request.method == 'POST':
 		if order_data['order_pk']:#기존 order 일 경우
+			
 			result_query_order=update_order(order_data)
 		else:#신규 order
 			result_query_order=insert_order(order_data)
@@ -82,12 +83,12 @@ def ordered_item_add(ordered_item_list,order_info):
 			for items in ordered_item_list:
 				order_item=Ordered_item(
 					ordered_item_order=order_info,
-					ordered_item_item= Item.objects.get(item_id=items['ordered_item_item']),
-					ordered_item_unit=Unit.objects.get(unit_id=items['ordered_item_unit']),
-					ordered_item_unit_price = items['ordered_item_unit_price'],
+					ordered_item_item= Item.objects.get(item_code=items['ordered_item_item_code']),
+					ordered_item_unit=Unit.objects.get(unit_code=items['ordered_item_unit_code']),
+					ordered_item_unit_price = items['ordered_item_unit_price'].replace(',',''),
 					ordered_item_qty =  items['ordered_item_qty'],
-					ordered_item_grade =Grade.objects.get(grade_id=items['ordered_item_grade']),
-					ordered_item_description = items['ordered_item_description'])
+					ordered_item_grade =Grade.objects.get(grade_code=items['ordered_item_grade_code']),
+					ordered_item_description = "items['ordered_item_description']")
 				order_item.save()
 		
 		transaction.savepoint_commit(sid)
@@ -97,38 +98,30 @@ def ordered_item_add(ordered_item_list,order_info):
 	except Exception as e:
 		# 트랜잭션 내에서 에러 발생시 롤백처리
 		transaction.savepoint_rollback(sid)
-		result['message'] = 'canceled'
+		result['message'] = 'canceled #'+ e.message
 		#traceback.print_exc()  , exception error  상세내역 출력
 		print "[ERROR]ordered_item_add failed" 
 
 	return result
 
 
-
-
-
-#특정 order에 엮인 order item 모두 삭제
-#사용안함
-def ordered_item_delete(order_pk):
-	Ordered_item.objects.filter(order_item=order_pk).delete()
-	#delete 예제
-	#instance = SomeModel.objects.get(id=id)
-	#instance.delete()
-
 @transaction.atomic
 def update_order(order_data):
 	result={}
 	temperr=""
 	try:
-		order_store = Store.objects.get(store_id=order_data['order_store'])
+		#print "#####\n"+order_data['order_store']
+		order_store = Store.objects.get(store_code=order_data['order_store_code'])
 		order_info = Order.objects.get(pk=order_data['order_pk'])
 		order_info.order_date=timezone.now() 
-		order_info.order_total_amount=order_data['order_total_amount']
-		order_info.order_paid_amount=order_data['order_paid_amount']
-		order_info.order_discounted_amount=order_data['order_discounted_amount']
-		order_info.order_outstanding_amount=order_data['order_outstanding_amount']
+		order_info.order_total_amount=order_data['order_total_amount'].replace(',','')
+		order_info.order_paid_amount=order_data['order_paid_amount'].replace(',','')
+		order_info.order_discounted_amount=order_data['order_discounted_amount'].replace(',','')
+		order_info.order_outstanding_amount=order_data['order_outstanding_amount'].replace(',','')
 		order_info.order_notes=order_data['order_notes']
+		
 		order_info.order_store=order_store
+
 		order_info.save()
 		result['message'] = 'success'
 		result['data']=order_info
@@ -138,21 +131,21 @@ def update_order(order_data):
 	except Store.DoesNotExist:
 		result['message'] = 'Store DoesNotExist'
 	except Exception as e:
-		result['message'] = e.message
+		result['message'] = 'message:1'+ e.message
 	return result
 
 @transaction.atomic
 def insert_order(order_data):
 	result={}
 	try:
-		order_store = Store.objects.get(store_id=order_data['order_store'])
+		order_store = Store.objects.get(store_code=order_data['order_store_code'])
 
 		order_info = Order(
 			order_date=timezone.now(), 
 			order_total_amount=order_data['order_total_amount'],
 			order_paid_amount=order_data['order_paid_amount'],
-			order_discounted_amount=order_data['order_discounted_amount'],
-			order_outstanding_amount=order_data['order_outstanding_amount'],
+			order_discounted_amount=order_data['order_discounted_amount'].replace(',',''),
+			order_outstanding_amount=order_data['order_outstanding_amount'].replace(',',''),
 			order_notes=order_data['order_notes'])
 		order_info.order_store=order_store
 		order_info.save()
@@ -165,5 +158,6 @@ def insert_order(order_data):
 		print e
 	
 	return result
+
 
 ################################################################################

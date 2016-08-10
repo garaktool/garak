@@ -97,13 +97,14 @@ function detail_submit() {
         cache: false,
         method: "POST",
 		 data:JSON.stringify({
-			 order_pk:pk,
+			order_pk:pk,
 			order_total_amount:de_commas($('#detail_table #order_total_amount').val()),
 			order_paid_amount:de_commas($('#detail_table #order_paid_amount').val()),
 			order_discounted_amount:de_commas($('#detail_table #order_discounted_amount').val()),
 			order_outstanding_amount:de_commas($('#detail_table #order_outstanding_amount').val()),
 			order_notes:de_commas($('#detail_table #adjustment_notes').val()),
-			order_store:$('#company_code').val(),
+			order_store:2,
+			//order_store:$('#company_code').val(),
 			// ordered_item_list:[
 			// 	{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
 			// 	{"ordered_item":"15","ordered_item_item":"3","ordered_item_unit":"1","ordered_item_grade":"1","ordered_item_unit_price":"1000","ordered_item_qty":"10","ordered_item_description":"기존 오더 아이템 id=15"},
