@@ -5,6 +5,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import generic
+from django.db.models import Max
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.db import transaction
@@ -14,11 +15,40 @@ import json
 
 
 def index(request):
-    latest_product_list = Item.objects.order_by('-pub_date')[:5]
-    context = {'latest_product_list': latest_product_list} 
-    return render(request, 'testapp/index.html', context)
+	order_info=[]
+	global_value={}
+	try:
+		#order_info = Order.objects.get(pk=order_id)
+		#order_info = Order.objects.order_by('-order_date')[:20]
+		order_info = Order.objects.order_by('-order_date')
+		global_value['store_list'] = Store.objects.order_by("store_code")
+		global_value['item_list'] =  Item.objects.order_by("item_code")
+		global_value['unit_list'] =  Unit.objects.order_by("unit_code")
+		global_value['grade_list'] =  Grade.objects.order_by("grade_code")
+
+	except Order.DoesNotExist:
+		raise Http404("Order does not exist")
+
+	return render(request, 'testapp/home.html', {'order_info': order_info,'global_value':global_value})
 
 ####################################################################
+def home(request):
+	order_info=[]
+	global_value={}
+	try:
+		#order_info = Order.objects.get(pk=order_id)
+		#order_info = Order.objects.order_by('-order_date')[:20]
+		order_info = Order.objects.order_by('-order_date')
+		global_value['store_list'] = Store.objects.order_by("store_code")
+		global_value['item_list'] =  Item.objects.order_by("item_code")
+		global_value['unit_list'] =  Unit.objects.order_by("unit_code")
+		global_value['grade_list'] =  Grade.objects.order_by("grade_code")
+
+	except Order.DoesNotExist:
+		raise Http404("Order does not exist")
+
+	return render(request, 'testapp/home.html', {'order_info': order_info,'global_value':global_value})
+
 #order page
 def order(request):
 	order_info=[]
@@ -158,15 +188,5 @@ def insert_order(order_data):
 	
 	return result
 
-def item_control(request):
-	 return render(request, 'testapp/index.html')
 
-def grade_control(request):
-	 return render(request, 'testapp/index.html')
-
-def unit_control(request):
-	 return render(request, 'testapp/index.html')
-
-def store_control(request):
-	 return render(request, 'testapp/index.html')	
 ################################################################################

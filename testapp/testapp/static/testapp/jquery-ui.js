@@ -2775,7 +2775,7 @@ $.widget( "ui.autocomplete", {
 		appendTo: null,
 		autoFocus: false,
 		delay: 300,
-		minLength: 1,
+		minLength: 0,
 		position: {
 			my: "left top",
 			at: "left bottom",
@@ -2929,6 +2929,7 @@ $.widget( "ui.autocomplete", {
 			focus: function() {
 				this.selectedItem = null;
 				this.previous = this._value();
+
 			},
 			blur: function( event ) {
 				if ( this.cancelBlur ) {
@@ -3009,7 +3010,10 @@ $.widget( "ui.autocomplete", {
 				}
 
 				// Announce the value in the liveRegion
+				if (item) {
+					console.log('item');
 				label = ui.item.attr( "aria-label" ) || item.value;
+				}
 				if ( label && $.trim( label ).length ) {
 					this.liveRegion.children().hide();
 					$( "<div>" ).text( label ).appendTo( this.liveRegion );
@@ -3031,9 +3035,13 @@ $.widget( "ui.autocomplete", {
 						this.selectedItem = item;
 					});
 				}
-
-				if ( false !== this._trigger( "select", event, { item: item } ) ) {
-					this._value( item.value );
+				if (item) {
+					if ( false !== this._trigger( "select", event, { item: item } ) ) {
+						this._value( item.value );
+					}
+				}
+				else {
+					popup.show('input', '아이템 추가', '내용');
 				}
 				// reset the term after the select event
 				// this allows custom select handling to work properly
@@ -3196,10 +3204,13 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
+		// if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
+		if ( !this.options.disabled && !this.cancelSearch ) {
+			console.log('a');
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
+			console.log('b');
 			// use ._close() instead of .close() so we don't cancel future searches
 			this._close();
 		}
@@ -3277,6 +3288,8 @@ $.widget( "ui.autocomplete", {
 		$.each( items, function( index, item ) {
 			that._renderItemData( ul, item );
 		});
+		// return $( "<li>" ).html( '<a href="/item_control">아이템 추가</a>' ).appendTo( ul );
+		return $( "<li class='add_item'>" ).html( '아이템 추가' ).appendTo( ul );
 	},
 
 	_renderItemData: function( ul, item ) {

@@ -1,0 +1,17 @@
+
+<body>
+{% if result == 'success' %}
+	<form  name="form1" method="post" target="/item_control">{% csrf_token %}
+	<input type=hidden id=submit_yn name=submit_yn value='yes'>
+	<input type=hidden id=item_id name=item_id value="{{item_info.item_id}}"><br><!-- 신규 등록 일경우 item_id는 비워두고, 수정일 경우 item_id 값을 넣어 주세요. -->
+		item 이름 : <input class="note" id="item_name" name="item_name" value="{{item_info.item_name}}"><br>
+		item unit : <input class="note" id="item_unit_id" name="item_unit_id" value="{{item_info.item_unit_id}}"><br><!-- unit_id 값이 넘어와야 합니다. unit은 order page와 같은 형태로 선택되게 해주세요.-->
+		item code : <input class="note" id="item_code" name="item_code" value="{{item_info.item_code}}"><br><!-- default_item_code : 권장하는 code값입니다. 코드값은 숫자만 입력 되게 제한 해주세요-->
+		item description : <input class="note" id="item_description" name="item_description" value="{{item_info.item_description}}"><br>
+		<input type=submit value='등록'>
+	</form>
+	</body>
+{% else %}
+	에러:{{result}} <br>
+	<a href='javascript:history.go(-1)'>뒤로가기</a>
+{% endif %}

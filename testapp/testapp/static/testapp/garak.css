@@ -463,7 +463,8 @@ table tr:last-child td:last-child {
 }
 
 #detail_table input {
-    width : 70%;
+    width : 65%;
+    padding-left : 5px;
 }
 
 #sub_table .garak_table {
@@ -519,12 +520,17 @@ tr:nth-child(even) {
 	top : 12px !important;
 }
 
+.input_section #product_code label {
+    text-align : left;
+}
+
 #item_table td:first-child, #item_table th:first-child {
 	width : 5%;
 }
 
 #item_table th:nth-child(2), #item_table td:nth-child(2) {
-	width : 10%;	
+	width : 15%;
+    text-align : left;
 }
 
 #item_table th:nth-child(3), #item_table td:nth-child(3) {
@@ -606,7 +612,7 @@ tr:nth-child(even) {
 }
 
 #item_table td:first-child, #item_table th:first-child {
-	width : 10%;
+	width : 6%;
 }
 
 
@@ -643,6 +649,18 @@ tr:nth-child(even) {
 	background-color : #4A4A4A;
 	width : 890px;
 	margin : 0 auto;
+    position : relative;
+    min-height : 315px;
+}
+
+.sub_left_wrapper {
+    float : left;
+}
+
+.sub_right_wrapper {
+    position : absolute;
+    right : 10px;
+    top : 49px;
 }
 
 .gara_table_export {
@@ -695,16 +713,25 @@ tr:nth-child(even) {
 
 .detail_save button {
 	background-color : #F5A623;
-	width : 217px;
+	width : 178px;
 	color : white;
 }
 
-.sub_left, .sub_right {
-	width : 440px !important;
+/*.sub_left, .sub_right {*/
+	/*width : 440px !important;*/
+/*}*/
+
+/*.sub_left {*/
+	/*float : left;*/
+/*}*/
+
+.sub_table_wrapper .sub_left_wrapper table {
+    width : 520px !important;
 }
 
-.sub_left {
-	float : left;
+
+.sub_table_wrapper .sub_right_wrapper table {
+    width : 360px !important;
 }
 
 .sub_left th:first-child {
@@ -879,6 +906,12 @@ z-index: 9999;
 }
 
 /** **/
+#sub_table .mdl-data-table td:first-of-type, .mdl-data-table th:first-of-type {
+    padding-left : 10px !important;
+}
+
+
+
   .mdl-data-table td {
     padding: 12px 12px 0 0;
     text-align: right; }

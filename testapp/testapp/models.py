@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime 
+from django.db.models import Max
 
 class Store(models.Model):
 	store_id = models.AutoField(primary_key=True)
@@ -58,7 +59,8 @@ class Item(models.Model):
 	
 	def save(self): 
 		max_code_number=Item.objects.all().aggregate(Max('item_code'))
-		self.item_code=max_code_number+1
+		if self.item_code <1:
+			self.item_code=max_code_number+1
 		super(Item, self).save()
 
 class Adjustment(models.Model):

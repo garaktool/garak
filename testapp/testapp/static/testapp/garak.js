@@ -683,6 +683,10 @@ $(document).ready(function() {
 	   $('#calculate').hide(); 
 	   $('.calculate_progress').hide(); 
     });
+
+	$('.add_item').on('click', function() {
+		popup.show('input', '아이템 추가', '내용');
+	});
     
     
     
