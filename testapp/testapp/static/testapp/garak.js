@@ -369,11 +369,12 @@ var popup = {
         $(popup.overlay).css('opacity', '0.7');
         $(popup.overlay).css('z-index', '999');
         $(popup.window).css('opacity', '1');
-        
+
+		if (type="alert") {
         $('.popup .title').text(title);
         $('.popup .msg .text').text(msg);
         $('.popup .action').find('.'+type).addClass('popup_show');
-        
+		}
     },
     
     hide: function() {
