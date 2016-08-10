@@ -19,6 +19,7 @@ def index(request):
     context = {'latest_product_list': latest_product_list} 
     return render(request, 'testapp/index.html', context)
 
+##edit0810
 ####################################################################
 #order page
 def order(request):
@@ -45,15 +46,15 @@ def submit_order(request):
 	order_info_save_ok = False
 	order_data = json.loads(request.body)
 	if request.method == 'POST':
-		if order_data['order_pk']:#±âÁ¸ order ÀÏ °æ¿ì
+		if order_data['order_pk']:#ï¿½ï¿½ï¿½ï¿½ order ï¿½ï¿½ ï¿½ï¿½ï¿½
 			
 			result_query_order=update_order(order_data)
-		else:#½Å±Ô order
+		else:#ï¿½Å±ï¿½ order
 			result_query_order=insert_order(order_data)
 			
 
-		if order_data.get('ordered_item_list', False) and result_query_order['message']=="success":#order itmeÀÌ ÀÖ°í , order ·¹ÄÚµå°¡ db¿¡ Àß µé¾î °¬À» °æ¿ì
-			#order itemÀ» ´Ù½Ã µî·Ï ÇÑ´Ù. , item_list ¿Í order_info °´Ã¼¸¦ ³Ñ±ä´Ù.
+		if order_data.get('ordered_item_list', False) and result_query_order['message']=="success":#order itmeï¿½ï¿½ ï¿½Ö°ï¿½ , order ï¿½ï¿½ï¿½Úµå°¡ dbï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+			#order itemï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½. , item_list ï¿½ï¿½ order_info ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ñ±ï¿½ï¿½.
 			result_query_order_item=ordered_item_add(order_data['ordered_item_list'],result_query_order['data'])
 			response_data['result'] =result_query_order_item['message']
 		elif result_query_order['message']!="success":
@@ -78,7 +79,7 @@ def ordered_item_add(ordered_item_list,order_info):
 	try:
 		with transaction.atomic():
 			sid = transaction.savepoint()
-			#order ¿¡ ¿«ÀÎ order itemÀ» ¸ðµÎ »èÁ¦ÇÑ´Ù.
+			#order ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ order itemï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 			Ordered_item.objects.filter(ordered_item_order=order_info.order_id).delete()
 			for items in ordered_item_list:
 				order_item=Ordered_item(
@@ -96,10 +97,10 @@ def ordered_item_add(ordered_item_list,order_info):
         # end transaction
 		result['message'] = 'success'
 	except Exception as e:
-		# Æ®·£Àè¼Ç ³»¿¡¼­ ¿¡·¯ ¹ß»ý½Ã ·Ñ¹éÃ³¸®
+		# Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½ï¿½ï¿½ ï¿½Ñ¹ï¿½Ã³ï¿½ï¿½
 		transaction.savepoint_rollback(sid)
 		result['message'] = 'canceled #'+ e.message
-		#traceback.print_exc()  , exception error  »ó¼¼³»¿ª Ãâ·Â
+		#traceback.print_exc()  , exception error  ï¿½ó¼¼³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		print "[ERROR]ordered_item_add failed" 
 
 	return result
@@ -153,7 +154,7 @@ def insert_order(order_data):
 		result['data']=order_info
 	except Store.DoesNotExist:
 		result['message'] = 'Store DoesNotExist'
-	except Exception as e:# error ¹ß»ý½Ã 
+	except Exception as e:# error ï¿½ß»ï¿½ï¿½ï¿½ 
 		result['message'] = 'SomeError_insert'
 		print e
 	

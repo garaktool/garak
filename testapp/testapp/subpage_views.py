@@ -13,7 +13,7 @@ import sys, traceback
 from .models import Item, Order, Ordered_item, Store, Grade, Unit
 import json
 
-
+#edit0810
 def item_control(request):
 	result={'message':'success'}
 	item_info={}
@@ -34,7 +34,7 @@ def item_control(request):
 			except Unit.DoesNotExist:
 				result['message'] = 'Unit DoesNotExist'
 			
-			except Exception as e:# error ¹ß»ý½Ã 
+			except Exception as e:# error ï¿½ß»ï¿½ï¿½ï¿½ 
 				result['message'] = 'item_update_error'
 				print "#########" + e.message
 			
@@ -58,7 +58,7 @@ def item_control(request):
 			except Unit.DoesNotExist:
 				result['message'] = 'Unit DoesNotExist'
 				
-			except Exception as e:# error ¹ß»ý½Ã 
+			except Exception as e:# error ï¿½ß»ï¿½ï¿½ï¿½ 
 				result['message'] = 'item_insert_error' + e.message
 				print "@#@#@#@#" + e.message
 				

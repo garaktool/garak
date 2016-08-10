@@ -8,6 +8,7 @@ from . import views, subpage_views
 # admin.autodiscover()
 app_name = 'testapp'
 
+##edit0810
 urlpatterns = [
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^$', views.index, name='index'),
