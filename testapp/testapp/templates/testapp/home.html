@@ -1,0 +1,698 @@
+{% load staticfiles %}
+{% load humanize %}
+<!DOCTYPE html>
+<html class="mdl-js">
+    <head>
+        <title>
+            GarakTool
+        </title>
+
+        <meta name="viewport" content="initial-scale=1, width=device-width"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/material.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/garak.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/date/css/bootstrap-datepicker3.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'testapp/jquery-ui.css' %}" />
+        <script src="{% static 'testapp/jquery-1.11.3.min.js' %}"></script>
+        <script src="{% static 'testapp/material.js' %}"></script>
+        <script src="{% static 'testapp/mdl-select.js' %}"></script>
+        <script src="{% static 'testapp/garak.js' %}"></script>
+        <script src="{% static 'testapp/jquery-ui.js' %}"></script>
+        <script src="{% static 'testapp/jquery.tabletojson.js' %}"></script>
+        <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+
+        <style>
+            .ui-autocomplete {
+                max-height: 100px;
+                overflow-y: auto;
+                /* prevent horizontal scrollbar */
+                overflow-x: hidden;
+            }
+            /* IE 6 doesn't support max-height
+             * we use height instead, but this forces the menu to always be this tall
+             */
+            * html .ui-autocomplete {
+                height: 100px;
+            }
+        </style>
+
+        <script>
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            
+            if(dd<10) {
+                dd='0'+dd
+            } 
+            
+            if(mm<10) {
+                mm='0'+mm
+            } 
+            
+            today = yyyy+'/'+mm+'/'+dd;
+            
+            </script>
+            
+            <script>
+              $(function() {
+                $( "#datepicker_start" ).datepicker();
+                $( "#datepicker_end" ).datepicker();
+                $( "#order_date" ).datepicker();
+                $( "#income_date" ).datepicker();
+              });
+            </script>
+              
+            <script>
+              $(function() {
+                var bank = [
+                "국민은행",
+                "기업은행",
+                "신한은행",
+                "농협"
+                ];
+                var code_ac = [
+                    {% for store_loop in global_value.store_list %}
+                        {% if store_loop.store_code < 10 %}
+                        "{{store_loop.store_name}}(00{{store_loop.store_code}})",
+                        {% elif store_loop.store_code < 100 %}
+                        "{{store_loop.store_name}}(0{{store_loop.store_code}})",
+                        {% else %}
+                        "{{store_loop.store_name}}({{store_loop.store_code}})",
+                        {% endif %}
+                    {% endfor %}
+                ];
+                var product_code_ac = [
+                    {% for item_loop in global_value.item_list %}
+                        {% if item_loop.item_code < 10 %}
+                            "{{item_loop.item_name}}(00{{item_loop.item_code}})",
+                        {% elif item_loop.item_code < 100 %}
+                            "{{item_loop.item_name}}(0{{item_loop.item_code}})",
+                        {% else %}
+                            "{{item_loop.item_name}}({{item_loop.item_code}})",
+                        {% endif %}
+                    {% endfor %}
+
+
+                ];
+                var product_grade_ac = [
+                    "1급(1)",
+                    "2급(2)",
+                    "3급(3)",
+                    "똥(4)",
+                    "11급(1)",
+                    "111급(1)",
+                    "1111급(1)",
+                    "11111급(1)",
+                    "111111급(1)",
+                    "12급(1)",
+                    "13급(1)",
+                    "14급(1)",
+                    "15급(1)",
+                    "16급(1)",
+                    "17급(1)",
+                    "18급(1)",
+                    "19급(1)",
+                    "10급(1)",
+                    "21급(1)",
+
+
+                ];
+                var product_unit_ac = [
+                    "박스(1)",
+                    "트럭(2)",
+                    "컨테이너(3)"
+                ]
+                $( "#quick_code" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: code_ac
+                });
+                $( "#company_code" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: code_ac
+                });
+                $( "#product_code_input" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: product_code_ac
+                });
+                $( "#product_grade_input" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: product_grade_ac
+                });
+                $( "#product_unit_input" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: product_unit_ac
+                });
+                $( "#bank" ).autocomplete({
+                  delay : 0,
+                  autoFocus: true,
+                  source: bank
+                });
+                
+              });
+              
+              
+
+                $(function()
+                {
+
+                });
+
+
+              </script>
+              
+
+
+
+              
+              
+            </head>
+
+<body>
+<div class="overlay"></div>
+<div class="popup">
+    <div class="title">
+    </div>
+    <div class="msg">
+        <span class="text"></span>
+        <div class="action">
+            <div class="confirm">
+                확인
+            </div>
+            <div class="question">
+            </div>
+            <div class="input">
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="garak_sales mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <div class="current_tool">
+            <span class="mdl-layout-title">매출</span>
+            </div><!-- Title -->
+            <div class="user_menu">
+                <span class="mdl-badge" data-badge="18"></span>
+                <span class="user_name">(주)봉수상회</span>
+            </div>
+            <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon garak_top_right_button">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+                <li id="user_logout" class="mdl-menu__item">로그아웃</li>
+            </ul>
+        </div>
+        <!-- Tabs -->
+        <div class="garak_sub_menu mdl-layout__tab-bar mdl-js-ripple-effect">
+          <a href="#scroll-tab-1" id="" class="mdl-layout__tab is-active">수주</a>
+          <a href="#scroll-tab-2" id="" class="mdl-layout__tab">정산</a>
+          <a href="#scroll-tab-3" id="" class="mdl-layout__tab">설정</a>
+          <a href="#scroll-tab-4" id="" class="mdl-layout__tab">통계</a>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Title</span>
+      </div>
+
+      <main class="mdl-layout__content">
+          <div class="board">
+              <div class="left_board">
+                  <div class="demo-card-wide mdl-card garak_card mdl-shadow--2dp">
+                      <div class="mdl-card__title garak_card_title">
+                          <h2 class="mdl-card__title-text ">'정정당당'</h2>
+                      </div>
+                      <div class="mdl-card__supporting-text garak_card_supporting_text">
+                          2015/08/01 기준 미수금
+                      </div>
+                      <div class="mdl-card__actions mdl-card--border">
+                          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                              25,838,000
+                          </a>
+                      </div>
+                  </div>
+              </div>
+              <div class="right_board">
+                  <div class="demo-card-wide mdl-card garak_card mdl-shadow--2dp">
+                      <div class="mdl-card__title garak_card_title">
+                          <h2 class="mdl-card__title-text">전체미수금</h2>
+                      </div>
+                      <div class="mdl-card__supporting-text garak_card_supporting_text">
+                          2015/08/02 기준 미수금
+                      </div>
+                      <div class="mdl-card__actions mdl-card--border">
+                          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                              37,652,000
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        <section class="mdl-layout__tab-panel garak-layout__tab-panel is-active" id="scroll-tab-1">
+            <div class="page-content">
+
+                <div id="quick_input" class="quick_input" style="display:none;">
+                    <input pattern="(\d{3})([\.])(\d{2})"></input>
+                    <input id="quick_code" onkeypress="quick_code_set(event);" placeholder="코드">
+                                        <button id="quick_submit" class="quick_code_set">입력</button>
+                </div>
+                <div id="quick_input_list" class="quick_input_list">
+                </div>
+
+
+                <div class="garak_sub_title">
+                    수주 관리
+                </div>
+                <div class="garak_sorting">
+                    일주일  |  한달  |  전체
+                </div>
+                <div class="garak_calendar">
+                    <div class="garak_calendar_start">
+                        <input placeholder="2015/08/01" id="datepicker_start"></input> ~ <input placeholder="2015/08/31" id="datepicker_end"></input>
+
+                    </div>
+                        
+                
+                    <div class="garak_calendar_end">
+                        <input placeholder="거래처지정안함"></input>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
+                            검색
+                        </button>
+            
+                    </div>
+
+                </div>
+
+                <div class="garak_sorting">
+                    모든내역 | 매출액순 | 미수금순 | 다른옵션
+
+                </div>
+        
+        
+        
+        
+                <div id="main_table">
+                    <div class="order_progress progress">
+                        수주 진행중<span>.</span><span>.</span><span>.</span>
+                    </div>
+                    <div class="garak_table_title">
+                        <!-- <i class="material-icons">view_module</i> --><span style="padding-left : 15px;">2015/08/01 부터 2015/08/31 까지 거래 내역</span>
+                        <div class="gara_table_export">
+                            <span>엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
+                        </div>
+                        
+                    </div>
+
+                    <table id="order_table" class="scrolltbody garak_table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                      <thead>
+                        <tr>
+                          <th>매출날짜</th>
+                          <th>매출처(코드)</th>
+                          <th>품목</th>
+                          <th>매출액</th>
+                          <th>수금액</th>
+                          <th>공제액</th>
+                          <th>미수금</th>
+                          <th class="last_column">비고
+                            <button id="new_order" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
+                                     새수주
+                            </button>                                
+
+                            </th>
+                        </tr>
+                      </thead>
+                      <tbody id="order_table_tbody" scroll="yes">
+
+						 {% for order_list in order_info %}
+                        <tr data-role="order" class="order_list dummy_data pending" id="order_{{order_list.order_id}}">
+                          <td data-role="value" class="date">{{ order_list.order_date|date:"Y-m-d" }}</td>
+                          <td data-role="value" class="code">{{ order_list.order_store.sotre_name}}</td>
+                          <td data-role="value" class="kind">{{ order_list.order_item_set.count }}</td>
+                          <td data-role="value" class="amount">{{ order_list.order_total_amount|intcomma }}</td>
+                          <td data-role="value" class="collect">{{ order_list.order_paid_amount|intcomma }}</td>
+                          <td data-role="value" class="deduct">{{ order_list.order_discounted_amount|intcomma }}</td>
+                          <td data-role="value" class="unconsumed">{{ order_list.order_outstanding_amount}}</td>
+                          <td data-role="value" class="note last_column">{{ order_list.order_notes}}</td>
+                          <td data-role="value" class="item_list">
+                               {% for orderitem_loop in order_list.ordered_item_set.all %}
+								   <span data-itemcode="{{orderitem_loop.ordered_item_item.item_code}}" data-itemgrade="{{orderitem_loop.ordered_item_grade.grade_code}}" data-itemunit="{{orderitem_loop.ordered_item_unit.unit_code}}">
+								   {{orderitem_loop.ordered_item_item.item_name}}
+								   {% if orderitem_loop.ordered_item_item.item_code < 10 %}
+										(00{{orderitem_loop.ordered_item_item.item_code}})
+								   {% elif orderitem_loop.ordered_item_item.item_code < 100 %}
+										(0{{orderitem_loop.ordered_item_item.item_code}})
+									{% else %}
+										({{orderitem_loop.ordered_item_item.item_code}})
+								   {% endif %},
+
+								   {{orderitem_loop.ordered_item_grade.grade_name}}({{orderitem_loop.ordered_item_grade.grade_code}}),
+
+									{{orderitem_loop.ordered_item_unit.unit_name}}({{orderitem_loop.ordered_item_unit.unit_code}}),
+
+
+								   {{orderitem_loop.ordered_item_unit_price}},{{orderitem_loop.ordered_item_qty}},{{orderitem_loop.ordered_item_total_amount}}</span>
+                              {% endfor %}
+                          </td>                        
+                        </tr>
+                        {% endfor %}
+
+                        <tr class="order_list dummy_data complete">
+                          <td class="date">2015-08-02</td>
+                          <td class="code">경석김치(004)</td>
+                          <td class="kind">4</td>
+                          <td class="amount">40,000</td>
+                          <td class="collect">20,000</td>
+                          <td class="deduct">20,000</td>
+                          <td class="unconsumed">0</td>
+                          <td class="note last_column">8/24 국민은행 입금</td>
+                          <td class="item_list">
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                              <span>배추(001),1급(1),박스(1),10000,1,10000</span>
+                          </td>                          
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                </div>
+                
+                <div id="sub_table">
+                    <form class="sub_table_form" id="sub_table_form" name="sub_table_form" method="post" target="/submit_order">
+
+                    <div class="garak_table_title">
+                        <!-- <i class="material-icons">view_module</i> -->
+                        <div style="padding-left : 15px;">상세수주내역</div>
+                            <div class="gara_table_export">
+                                <span>엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
+                        </div>
+                    </div>
+                    <div class="sub_table_wrapper clear">
+                        <div class="detail_view_date">
+                            <span>매출일 : <input id="order_date" name="order_date" class="date today detail_table" onkeypress="set_today(event);"></span> <span style="margin-left:25px;">매출처 : <input id="company_code" name="order_store" onkeypress="set_company(event);" class="code detail_table"></span>
+                        </div>
+                        <div class="clear sub_left_wrapper">
+                            <table id="item_table" class="garak_table sub_left mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                              <thead>
+                                <tr class="top_radius">
+                                  <th data-override="ordered_item_item">품목(코드)</th>
+                                  <th data-override="ordered_item_grade">등급</th>
+                                  <th data-override="ordered_item_unit">단위</th>
+                                  <th data-override="ordered_item_unit_price">단가</th>
+                                  <th data-override="ordered_item_qty">수량</th>
+                                  <th class="new_item_container">
+                                  매출액
+                                  </th>
+                                </tr>
+                                <tr class="input_section">
+                                    <td></td>
+                                    <td data-override=" " id="product_code" class="mdl-textfield mdl-js-textfield garak_table_input">
+                                        <input class="mdl-textfield__input" type="text" id="product_code_input" name="ordered_item_item_code" onkeypress="enterTab(event);"> <!--  INPUT창에 있는 name이 하위로 옮겨가야함 -->
+                                        <label data-override=" " class="mdl-textfield__label" for="product_code_input">품목(코드)</label>
+                                    </td>
+                                    <td data-override=" " id="product_grade" class="mdl-textfield mdl-js-textfield garak_table_input">
+                                        <input class="mdl-textfield__input" type="text" id="product_grade_input" name="ordered_item_grade_code" onkeypress="enterTab(event);">
+                                        <label class="mdl-textfield__label" for="product_grade_input">1급(1)</label>
+                                    </td>
+                                    <td data-override=" " id="product_unit" class="mdl-textfield mdl-js-textfield garak_table_input">
+                                        <input class="mdl-textfield__input" type="text" id="product_unit_input" name="ordered_item_unit_code" onkeypress="enterTab(event);">
+                                        <label class="mdl-textfield__label" for="product_unit_input">박스(1)</label>
+                                    </td>
+                                    <td data-override=" " id="product_price" class="mdl-textfield mdl-js-textfield garak_table_input">
+                                        <input class="mdl-textfield__input" type="text" id="product_price_input" name="ordered_item_unit_price" onkeypress="enterTab(event);">
+                                        <label class="mdl-textfield__label" for="product_price_input">0</label>
+                                    </td>
+                                    <td data-override=" " id="product_quantity" class="mdl-textfield mdl-js-textfield garak_table_input">
+                                        <input class="mdl-textfield__input" type="text" id="product_quantity_input" name="ordered_item_qty" onkeypress="enterTab(event);">
+                                        <label class="mdl-textfield__label" for="product_quantity_input">1</label>
+                                    </td>
+                                    <td data-override=" " id="product_amount" class="mdl-textfield mdl-js-textfield garak_table_input last_column">
+                                        <input class="mdl-textfield__input" type="text" id="product_amount_input" onkeypress="enterKeySubmit(event);" autocomplete="off">
+                                        <label class="mdl-textfield__label" for="product_amount_input"></label>
+
+                                    </td>
+
+                                </tr>
+                              </thead>
+                              <tbody id="item_list_table">
+
+
+                              </tbody>
+                            </table>
+                        </div>
+                        <div class="clear sub_right_wrapper">
+                            <table id="detail_table" class="garak_table sub_right mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                                <tbody>
+                                    <tr class="top_radius">
+                                        <th colspan="2">
+                                            수주 내용
+                                                
+                                        </th>
+                                    </tr>
+        
+                                    <tr>
+                                        <td>
+                                            <span>매출액 : </span><input class="amount" id="order_total_amount" name="order_total_amount"></input>
+                                        </td>
+                                        <td>    
+                                            수금날짜 : <input id="income_date" name="order_adjustment_date">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            수금액 : <input class="collect" id="order_paid_amount" name="order_paid_amount">
+                                        </td>
+                                        <td>    
+                                            수금형태 : <select name="order_adjustment_type">
+                                            <option value="1">입금</option>
+                                            <option value="2">외상</option>
+                                            <option value="3">현금</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            공제액 : <input class="deduct" id="order_discounted_amount" name="order_discounted_amount" >
+                                        </td>
+                                        <td>    
+                                            수금은행 : <input id="bank" name="adjustment_bank">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            미수금 : <input class="unconsumed" id="order_outstanding_amount" name="order_outstanding_amount">
+                                        </td>
+                                        <td>    
+                                            수금상태 : <span class="status" name="order_adjustment_state"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            비  고 : <input class="note" id="adjustment_notes" name="adjustment_notes">
+                                        </td>
+        <!--
+                                        <td>    
+                                        </td>
+        -->
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            <div class="detail_save">
+                                <button id="detail_confirm" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn" data-upgraded=",MaterialButton,MaterialRipple">
+                                     저장
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 156.491px; height: 156.491px; transform: translate(-50%, -50%) translate(40px, 18px);"></span></span></button>
+
+                                <button id="detail_cancel" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn" data-upgraded=",MaterialButton,MaterialRipple">
+                                     취소
+                            <span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 156.491px; height: 156.491px; transform: translate(-50%, -50%) translate(40px, 18px);"></span></span></button>                               
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </form>
+        
+            </div> <!-- end of section -->
+    
+    
+        </section> <!-- 발주관리 끝 -->
+        <section class="mdl-layout__tab-panel" id="scroll-tab-2"> <!-- 정산관리 시작 -->
+            <div class="calculate_overlay"></div>
+            <div class="page-content">
+                <div class="board">
+                    <div class="left_board">
+                        <div class="demo-card-wide mdl-card garak_card mdl-shadow--2dp">
+                          <div class="mdl-card__title garak_card_title">
+                            <h2 class="mdl-card__title-text ">'정정당당'</h2>
+                          </div>
+                          <div class="mdl-card__supporting-text garak_card_supporting_text">
+                            2015/08/01 기준 미수금
+                          </div>
+                          <div class="mdl-card__actions mdl-card--border">
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                              25,838,000
+                            </a>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="right_board">
+                        <div class="demo-card-wide mdl-card garak_card mdl-shadow--2dp">
+                          <div class="mdl-card__title garak_card_title">
+                            <h2 class="mdl-card__title-text">전체미수금</h2>
+                          </div>
+                          <div class="mdl-card__supporting-text garak_card_supporting_text">
+                            2015/08/02 기준 미수금
+                          </div>
+                          <div class="mdl-card__actions mdl-card--border">
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                              37,652,000
+                            </a>
+                          </div>
+                        </div>                        
+                    </div>
+                </div>
+            
+                <div class="garak_sub_title">
+                    정산
+                </div>
+                <div class="garak_sorting">
+                    일주일  |  한달  |  전체
+                </div>
+                <div class="garak_calendar">
+                    <div class="garak_calendar_start">
+                        <input placeholder="2015/08/01"></input><!-- <i class="material-icons">date_range</i>  --> ~                        <input placeholder="2015/08/31"></input><!-- <i class="material-icons">date_range</i> -->
+
+                    </div>
+                        
+                
+                    <div class="garak_calendar_end">
+                        <input placeholder="거래처지정안함"></input>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
+                            검색
+                        </button>
+            
+                    </div>
+
+                </div>
+                <div class="garak_sorting">
+                    모든내역 | 매출액순 | 미수금순 | 다른옵션
+                </div> 
+                <div id="main_table">
+                    <div class="calculate_progress progress">
+                        정산 진행중<span>.</span><span>.</span><span>.</span>
+                    </div>
+                
+                    <div class="garak_table_title">
+                        <!-- <i class="material-icons">view_module</i> --><span style="padding-left : 15px;">2015/08/01 부터 2015/08/31 까지 거래 내역</span>
+                        <div class="gara_table_export">
+                            <span>엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
+                        </div>
+                    </div>
+
+                    <table id="order_table" class="garak_table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                      <thead>
+                        <tr>
+                          <th>매출날짜</th>
+                          <th>매출처(코드)</th>
+                          <th>거래종류</th>
+                          <th>매출액</th>
+                          <th>수금액/입금액</th>
+                          <th>공제액</th>
+                          <th>정산액</th>
+                        <th>결재일</th>
+                            <th>결재상태</th>
+                          <th class="last_column">비고
+                            <button id="new_calculate" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
+                                     새정산
+                            </button>                                
+
+                            </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr class="">
+                          <td>2015-09-02</td>
+                          <td>정정당당(001)</td>
+                          <td>배추(001)</td>
+                          <td>165,000</td>
+                          <td>65,000</td>
+                          <td>0</td>
+                          <td>100,000</td>
+                            <td>당일</td>
+                            <td>완료</td>
+                          <td class="last_column">0</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+                <div id="calculate">
+                 <!-- 정산팝업 -->
+                    <div class="garak_table_title">
+                        <!-- <i class="material-icons">view_module</i> --><span style="padding-left : 15px;">'정정당당' 정산목록</span>
+<!--
+                        <div class="gara_table_export">
+                            <span>엑셀변환</span><span>인쇄</span>
+                        </div>
+-->
+                    </div>
+
+                    <table id="calculate_table" class="garak_table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                      <thead>
+                        <tr>
+                          <th>매출날짜</th>
+                          <th>거래종류</th>
+                          <th>매출액</th>
+                          <th>수금액/입금액</th>
+                          <th>공제액</th>
+                          <th>정산액</th>
+                            <th>결재일</th>
+                            <th>결재상태</th>
+                          <th class="last_column">비고
+                            </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                    <div id="confirm_calculate">
+                        <div class="summary">
+                            위 5 개의 주문을 2015/09/01 입금 된 10,000,00 원 으로 정산을 하게 되면, <span style="color:red;">175,200 원</span> 의 미수금이 남게 됩니다. 
+                        </div>
+                        <div class="confirm_btn">
+                            <button id="deduct" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
+                                공제함
+                            </button>
+                            <button id="unconsumed" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
+                                미수처리
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+          <div class="page-content" style="color:white;">설정</div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+          <div class="page-content" style="color:white;">통계</div>
+        </section>
+            <div id="bottom_navigation" class="bottom_navigation">
+            ㅋㅋ
+    </div>
+
+      </main>
+
+    </div>
+    
+</body>
+
+</html>
