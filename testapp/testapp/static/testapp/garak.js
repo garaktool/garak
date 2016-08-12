@@ -4,6 +4,43 @@ width = $(window).width();
 height = $(window).height();
 
 // global function
+function current_tab(href) {
+	var tab_id = href.slice('-1');
+
+	switch (tab_id) {
+		case '1':
+			board.show();
+			break;
+		case '2':
+			board.show();
+			break;
+		case '3':
+			board.hide();
+			break;
+		default:
+			console.log('default');
+	}
+
+
+
+}
+
+function load(target, url) {
+	$.ajax({
+		url: url,
+		cache: false,
+		method: "GET"
+	})
+		.done(function(data) {
+			// alert("Data Loaded : " + msg);
+			$(target).html(data);
+
+		})
+		.fail(function() {
+			alert("failed");
+		});
+}
+
 function commas_checker(x) {
 	console.log('요거 만들어야 할듯');
 }
@@ -356,6 +393,27 @@ $('.overlay').on('click', function() {
 });
 
 
+var page_init = {
+	status : "failed",
+
+	init: function() {
+		console.log('init!!!');
+		load('#item_control_wrapper','item_control');
+	}
+};
+
+var board = {
+	status : "show",
+
+	show: function() {
+		$('.board').show();
+	},
+
+	hide: function() {
+		$('.board').hide();
+	}
+};
+
 var popup = {
     status : "off",
     overlay : document.getElementsByClassName('overlay'),
@@ -370,10 +428,31 @@ var popup = {
         $(popup.overlay).css('z-index', '999');
         $(popup.window).css('opacity', '1');
 
-		if (type="alert") {
-        $('.popup .title').text(title);
-        $('.popup .msg .text').text(msg);
-        $('.popup .action').find('.'+type).addClass('popup_show');
+		switch(type) {
+			case alert:
+				$('.popup .title').text(title);
+				$('.popup .msg .text').text(msg);
+				$('.popup .action').find('.'+type).addClass('popup_show');
+				break;
+
+			default:
+				$.ajax({
+					url: type,
+					cache: false,
+					method: "GET"
+				})
+					.done(function(data) {
+						// alert("Data Loaded : " + msg);
+						$('.popup .title').text(title);
+						$('.popup .msg .text').html(data);
+						$('.popup .action').find('.save').addClass('popup_show');
+
+
+					})
+					.fail(function() {
+						alert("failed");
+					});
+
 		}
     },
     
@@ -446,6 +525,8 @@ var order = {
 };
 
 $(document).ready(function() {
+	page_init.init();
+
 	$('.quick_code_set').on("click", function() {
 		quick_input_set();
 	});

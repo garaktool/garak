@@ -401,6 +401,14 @@
 	line-height: 28px !important;
 }
 
+.item_control .garak_table_title {
+    background-color : #5AAFEE !important;
+}
+
+.item_control td {
+    color : #000;
+}
+
 #main_table {
 	position : relative;
 }

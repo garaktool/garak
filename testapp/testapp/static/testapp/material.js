@@ -3557,7 +3557,9 @@ function MaterialLayoutTab(tab, tabs, panels, layout) {
      * Auxiliary method to programmatically select a tab in the UI.
      */
     function selectTab() {
+
         var href = tab.href.split('#')[1];
+        current_tab(href);
         var panel = layout.content_.querySelector('#' + href);
         layout.resetTabState_(tabs);
         layout.resetPanelState_(panels);

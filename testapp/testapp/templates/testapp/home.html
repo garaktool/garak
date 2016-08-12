@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles %} 
 {% load humanize %}
 <!DOCTYPE html>
 <html class="mdl-js">
@@ -188,6 +188,10 @@
             </div>
             <div class="input">
             </div>
+            <div class="save">
+                <div>저장</div>
+                <div>취소</div>
+            </div>
         </div>
     </div>
 </div>
@@ -256,44 +260,11 @@
           </div>
         <section class="mdl-layout__tab-panel garak-layout__tab-panel is-active" id="scroll-tab-1">
             {% include "./testapp/order.html" %}
-
-    
         </section> <!-- 발주관리 끝 -->
         <section class="mdl-layout__tab-panel" id="scroll-tab-2"> <!-- 정산관리 시작 -->
             <div class="calculate_overlay"></div>
             <div class="page-content">
-                <div class="board">
-                    <div class="left_board">
-                        <div class="demo-card-wide mdl-card garak_card mdl-shadow--2dp">
-                          <div class="mdl-card__title garak_card_title">
-                            <h2 class="mdl-card__title-text ">'정정당당'</h2>
-                          </div>
-                          <div class="mdl-card__supporting-text garak_card_supporting_text">
-                            2015/08/01 기준 미수금
-                          </div>
-                          <div class="mdl-card__actions mdl-card--border">
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                              25,838,000
-                            </a>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="right_board">
-                        <div class="demo-card-wide mdl-card garak_card mdl-shadow--2dp">
-                          <div class="mdl-card__title garak_card_title">
-                            <h2 class="mdl-card__title-text">전체미수금</h2>
-                          </div>
-                          <div class="mdl-card__supporting-text garak_card_supporting_text">
-                            2015/08/02 기준 미수금
-                          </div>
-                          <div class="mdl-card__actions mdl-card--border">
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                              37,652,000
-                            </a>
-                          </div>
-                        </div>                        
-                    </div>
-                </div>
+
             
                 <div class="garak_sub_title">
                     정산
@@ -416,7 +387,9 @@
                 </div>
         </section>
         <section class="mdl-layout__tab-panel" id="scroll-tab-3">
-          <div class="page-content" style="color:white;">설정</div>
+          <div class="page-content" style="color:white;">
+              <div id="item_control_wrapper"></div>
+          </div>
         </section>
         <section class="mdl-layout__tab-panel" id="scroll-tab-4">
           <div class="page-content" style="color:white;">통계</div>
