@@ -3041,7 +3041,7 @@ $.widget( "ui.autocomplete", {
 					}
 				}
 				else {
-					popup.show('input', '아이템 추가', '내용');
+					// popup.show('input', '아이템 추가', '내용');
 				}
 				// reset the term after the select event
 				// this allows custom select handling to work properly
