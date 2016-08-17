@@ -13,7 +13,7 @@ import sys, traceback
 from .models import Item, Order, Ordered_item, Store, Grade, Unit
 import json
 
-#test0818
+#test0818 2
 def index(request):
 	order_info=[]
 	global_value={}
