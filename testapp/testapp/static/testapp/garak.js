@@ -447,7 +447,7 @@ var add = {
 
 }
 
-var noti = {
+var noti = { // alert 대체
     status : "off",
     overlay : document.getElementsByClassName('overlay'),
     window : document.getElementsByClassName('noti'),
@@ -507,29 +507,27 @@ var popup = {
 
 	},
 
-	show: function(type, title, msg) {
+	show: function(url, v) {
 		$(popup.overlay).css('opacity', '0.7');
 		$(popup.overlay).css('z-index', '999');
 		$(popup.window).css('opacity', '1');
 
-		switch(type) {
+		switch(url) {
 			case alert:
-				$('.popup .title').text(title);
-				$('.popup .msg .text').text(msg);
-				$('.popup .action').find('.'+type).addClass('popup_show');
+				$('.popup .msg .text').text(data);
+				// $('.popup .action').find('.'+type).addClass('popup_show');
 				break;
 
 			default:
 				$.ajax({
-					url: type,
+					url: url,
 					cache: false,
 					method: "GET"
 				})
 					.done(function(data) {
 						// alert("Data Loaded : " + msg);
-						$('.popup .title').text(title);
 						$('.popup .msg .text').html(data);
-						$('.popup .action').find('.save').addClass('popup_show');
+						// $('.popup .action').find('.save').addClass('popup_show');
 
 
 					})
