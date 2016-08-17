@@ -1,11 +1,11 @@
 from django.db import models
 from django.forms import ModelForm
 from django import forms
-from .models import Product
+from .models import Store
 
-class ProductForm(ModelForm):
+class StoreForm(ModelForm):
 	class Meta:
-		model = Product
+		model = Store
 		#fields = '__all__'
-		fields = ['unit', 'price', 'description','question_text','name']
+		#fields = ['unit', 'price', 'description','question_text','name']
 
