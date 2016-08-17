@@ -279,7 +279,7 @@ $(document).on("click", ".add_item", function() {
 			console.log('id는 2');
 			break;
 		case 'ui-id-3' : //품목추가
-			noti.show('item_control', '아이템 추가', '내용');
+			popup.show('item_control');
 			break;
 		case 'ui-id-4' :
 			console.log('id는 4');
@@ -526,7 +526,7 @@ var popup = {
 				})
 					.done(function(data) {
 						// alert("Data Loaded : " + msg);
-						$('.popup .msg .text').html(data);
+						$('.popup .msg').html(data);
 						// $('.popup .action').find('.save').addClass('popup_show');
 
 
