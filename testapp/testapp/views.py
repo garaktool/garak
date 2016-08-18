@@ -102,7 +102,7 @@ def submit_order(request):
 			content_type="application/json"
 		)
 
-
+#0818--JH
 def ordered_item_add(ordered_item_list,order_info):
 
     print "@@@@@@@@@@@@\n"
