@@ -104,15 +104,35 @@ def submit_order(request):
 
 #0818--JH
 def ordered_item_add(ordered_item_list,order_info):
+	result={}
+	try:
+		with transaction.atomic():
+			sid = transaction.savepoint()
+			Ordered_item.objects.filter(ordered_item_order=order_info.order_id).delete()
+			print "@@@@@@@@@\n" + ordered_item_list
+			for items in ordered_item_list:
 
-    print "@@@@@@@@@@@@\n"
-    print ordered_item_list
-    print "@@@@@@@@@@@@\n"
-    print order_info
+				order_item=Ordered_item(
+					ordered_item_order=order_info,
+					ordered_item_item= Item.objects.get(item_code=items['ordered_item_item_code']),
+					ordered_item_unit=Unit.objects.get(unit_code=items['ordered_item_unit_code']),
+					ordered_item_unit_price = items['ordered_item_unit_price'].replace(',',''),
+					ordered_item_qty =  items['ordered_item_qty'],
+					ordered_item_grade =Grade.objects.get(grade_code=items['ordered_item_grade_code']),
+					ordered_item_description = "items['ordered_item_description']")
+				order_item.save()
 
-    result['message'] = 'success'
-    return result
+		transaction.savepoint_commit(sid)
+		#print "good"
+        # end transaction
+		result['message'] = 'success'
+	except Exception as e:
+		transaction.savepoint_rollback(sid)
+		result['message'] = 'canceled #'+ e.message
+		#traceback.print_exc()  , exception error
+		print "[ERROR]ordered_item_add failed # " + e.message
 
+	return result
 
 @transaction.atomic
 def update_order(order_data):
