@@ -13,7 +13,7 @@ import sys, traceback
 from .models import Item, Order, Ordered_item, Store, Grade, Unit
 import json
 
-#edit0810
+#edit0810 2
 def item_control(request):
 	result={'message':'success'}
 	item_info={}

@@ -13,7 +13,7 @@ import sys, traceback
 from .models import Item, Order, Ordered_item, Store, Grade, Unit
 import json
 
-#test0818
+
 def index(request):
 	order_info=[]
 	global_value={}
@@ -31,7 +31,7 @@ def index(request):
 
 	return render(request, 'testapp/home.html', {'order_info': order_info,'global_value':global_value})
 
-##edit0810
+##edit0810 2
 ####################################################################
 def home(request):
 	order_info=[]

@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime 
 from django.db.models import Max
-
+#
 class Store(models.Model):
 	store_id = models.AutoField(primary_key=True)
 	store_name =  models.CharField(max_length=100,default=0)
