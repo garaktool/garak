@@ -85,10 +85,12 @@ $.ajaxSetup({
 
 $(document).on('click', '.overlay', function() {
     noti.hide();
+	popup.hide();
 });
 
 $(document).on('click', '.noti .confirm', function() {
     noti.hide();
+	popup.hide();
 })
 
 
