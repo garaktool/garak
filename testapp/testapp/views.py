@@ -13,7 +13,7 @@ import sys, traceback
 from .models import Item, Order, Ordered_item, Store, Grade, Unit
 import json
 
-
+#한글테스트
 def index(request):
 	order_info=[]
 	global_value={}
@@ -75,15 +75,15 @@ def submit_order(request):
 	order_info_save_ok = False
 	order_data = json.loads(request.body)
 	if request.method == 'POST':
-		if order_data['order_pk']:#���� order �� ���
-			
-			result_query_order=update_order(order_data)
-		else:#�ű� order
-			result_query_order=insert_order(order_data)
-			
+		if order_data['order_pk']:
 
-		if order_data.get('ordered_item_list', False) and result_query_order['message']=="success":#order itme�� �ְ� , order ���ڵ尡 db�� �� ��� ���� ���
-			#order item�� �ٽ� ��� �Ѵ�. , item_list �� order_info ��ü�� �ѱ��.
+			result_query_order=update_order(order_data)
+		else:
+			result_query_order=insert_order(order_data)
+
+
+		if order_data.get('ordered_item_list', False) and result_query_order['message']=="success":
+
 			result_query_order_item=ordered_item_add(order_data['ordered_item_list'],result_query_order['data'])
 			response_data['result'] =result_query_order_item['message']
 		elif result_query_order['message']!="success":
@@ -104,35 +104,14 @@ def submit_order(request):
 
 
 def ordered_item_add(ordered_item_list,order_info):
-	result={}
-	try:
-		with transaction.atomic():
-			sid = transaction.savepoint()
-			#order �� ���� order item�� ��� �����Ѵ�.
-			Ordered_item.objects.filter(ordered_item_order=order_info.order_id).delete()
-			for items in ordered_item_list:
-				order_item=Ordered_item(
-					ordered_item_order=order_info,
-					ordered_item_item= Item.objects.get(item_code=items['ordered_item_item_code']),
-					ordered_item_unit=Unit.objects.get(unit_code=items['ordered_item_unit_code']),
-					ordered_item_unit_price = items['ordered_item_unit_price'].replace(',',''),
-					ordered_item_qty =  items['ordered_item_qty'],
-					ordered_item_grade =Grade.objects.get(grade_code=items['ordered_item_grade_code']),
-					ordered_item_description = "items['ordered_item_description']")
-				order_item.save()
-		
-		transaction.savepoint_commit(sid)
-		#print "good"
-        # end transaction
-		result['message'] = 'success'
-	except Exception as e:
-		# Ʈ����� ������ ���� �߻��� �ѹ�ó��
-		transaction.savepoint_rollback(sid)
-		result['message'] = 'canceled #'+ e.message
-		#traceback.print_exc()  , exception error  �󼼳��� ���
-		print "[ERROR]ordered_item_add failed" 
 
-	return result
+    print "@@@@@@@@@@@@\n"
+    print ordered_item_list
+    print "@@@@@@@@@@@@\n"
+    print order_info
+
+    result['message'] = 'success'
+    return result
 
 
 @transaction.atomic
@@ -143,19 +122,19 @@ def update_order(order_data):
 		#print "#####\n"+order_data['order_store']
 		order_store = Store.objects.get(store_code=order_data['order_store_code'])
 		order_info = Order.objects.get(pk=order_data['order_pk'])
-		order_info.order_date=timezone.now() 
+		order_info.order_date=timezone.now()
 		order_info.order_total_amount=order_data['order_total_amount'].replace(',','')
 		order_info.order_paid_amount=order_data['order_paid_amount'].replace(',','')
 		order_info.order_discounted_amount=order_data['order_discounted_amount'].replace(',','')
 		order_info.order_outstanding_amount=order_data['order_outstanding_amount'].replace(',','')
 		order_info.order_notes=order_data['order_notes']
-		
+
 		order_info.order_store=order_store
 
 		order_info.save()
 		result['message'] = 'success'
 		result['data']=order_info
-		
+
 	except Order.DoesNotExist:
 		result['message'] = 'Order DoesNotExist'
 	except Store.DoesNotExist:
@@ -171,7 +150,7 @@ def insert_order(order_data):
 		order_store = Store.objects.get(store_code=order_data['order_store_code'])
 
 		order_info = Order(
-			order_date=timezone.now(), 
+			order_date=timezone.now(),
 			order_total_amount=order_data['order_total_amount'],
 			order_paid_amount=order_data['order_paid_amount'],
 			order_discounted_amount=order_data['order_discounted_amount'].replace(',',''),
@@ -183,10 +162,10 @@ def insert_order(order_data):
 		result['data']=order_info
 	except Store.DoesNotExist:
 		result['message'] = 'Store DoesNotExist'
-	except Exception as e:# error �߻��� 
+	except Exception as e:
 		result['message'] = 'SomeError_insert'
 		print e
-	
+
 	return result
 
 
