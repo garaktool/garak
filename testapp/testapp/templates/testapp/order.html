@@ -54,16 +54,21 @@
 
         </div>
 
-        <table id="order_table" class="scrolltbody garak_table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+        <table id="order_table" class="scrolltbody garak_table mdl-data-table mdl-shadow--2dp">
             <thead>
             <tr>
+                <th>
+                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="order_table-header">
+                        <input type="checkbox" id="order_table-header" class="mdl-checkbox__input" />
+                    </label>
+                </th>
                 <th>매출날짜</th>
                 <th>매출처(코드)</th>
                 <th>품목</th>
                 <th>매출액</th>
-                <th>수금액</th>
-                <th>공제액</th>
-                <th>미수금</th>
+                <th>최초수금액</th>
+                <th>최초공제액</th>
+                <th>최초미수금</th>
                 <th class="last_column">비고
                     <button id="new_order" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
                         새수주
@@ -75,7 +80,12 @@
             <tbody id="order_table_tbody" scroll="yes">
 
             {% for order_list in order_info %}
-            <tr data-role="order" class="order_list dummy_data pending" id="order_{{order_list.order_id}}">
+            <tr data-role="order" data-numb="{{order_list.order_id}}" class="order_list dummy_data pending" id="order_{{order_list.order_id}}">
+                <td>
+                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[{{order_list.order_id}}]">
+                        <input type="checkbox" id="row[{{order_list.order_id}}]" class="mdl-checkbox__input" />
+                    </label>
+                </td>
                 <td data-role="value" class="date">{{ order_list.order_date|date:"Y-m-d" }}</td>
                 <td data-role="value" class="code">{{ order_list.order_store.sotre_name}}</td>
                 <td data-role="value" class="kind">{{ order_list.order_item_set.count }}</td>
@@ -107,23 +117,6 @@
             </tr>
             {% endfor %}
 
-            <tr class="order_list dummy_data complete">
-                <td class="date">2015-08-02</td>
-                <td class="code">경석김치(004)</td>
-                <td class="kind">4</td>
-                <td class="amount">40,000</td>
-                <td class="collect">20,000</td>
-                <td class="deduct">20,000</td>
-                <td class="unconsumed">0</td>
-                <td class="note last_column">8/24 국민은행 입금</td>
-                <td class="item_list">
-                    <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                    <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                    <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                    <span>배추(001),1급(1),박스(1),10000,1,10000</span>
-                </td>
-            </tr>
-
             </tbody>
         </table>
     </div>
@@ -135,7 +128,7 @@
                 <!-- <i class="material-icons">view_module</i> -->
                 <div style="padding-left : 15px;">상세수주내역</div>
                 <div class="gara_table_export">
-                    <span>엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
+                    <span id="sub_remove">삭제</span><span style="padding-left : 15px;">엑셀 변환</span><span style="padding-left : 15px;">인쇄</span>
                 </div>
             </div>
             <div class="sub_table_wrapper clear">
@@ -143,9 +136,14 @@
                     <span>매출일 : <input id="order_date" name="order_date" class="date today detail_table" onkeypress="set_today(event);"></span> <span style="margin-left:25px;">매출처 : <input id="company_code" name="order_store" onkeypress="set_company(event);" class="code detail_table"></span>
                 </div>
                 <div class="clear sub_left_wrapper">
-                    <table id="item_table" class="garak_table sub_left mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                    <table id="item_table" class="garak_table sub_left mdl-data-table mdl-shadow--2dp">
                         <thead>
                         <tr class="top_radius">
+                            <th>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="sub_table-header">
+                                    <input type="checkbox" id="sub_table-header" class="mdl-checkbox__input" />
+                                </label>
+                            </th>
                             <th data-override="ordered_item_item_code">품목(코드)</th>
                             <th data-override="ordered_item_grade_code">등급</th>
                             <th data-override="ordered_item_unit_code">단위</th>
@@ -206,24 +204,23 @@
                                 <span>매출액 : </span><input class="amount" id="order_total_amount" name="order_total_amount"></input>
                             </td>
                             <td>
-                                수금날짜 : <input id="income_date" name="order_adjustment_date">
+                                수금예정일 : <input id="income_date" name="order_adjustment_date">
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                수금액 : <input class="collect" id="order_paid_amount" name="order_paid_amount">
+                                최초수금액 : <input class="collect" id="order_paid_amount" name="order_paid_amount">
                             </td>
                             <td>
                                 수금형태 : <select name="order_adjustment_type">
                                 <option value="1">입금</option>
-                                <option value="2">외상</option>
-                                <option value="3">현금</option>
+                                <option value="2">현금</option>
                             </select>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                공제액 : <input class="deduct" id="order_discounted_amount" name="order_discounted_amount" >
+                                최초공제액 : <input class="deduct" id="order_discounted_amount" name="order_discounted_amount" >
                             </td>
                             <td>
                                 수금은행 : <input id="bank" name="adjustment_bank">
@@ -231,7 +228,7 @@
                         </tr>
                         <tr>
                             <td>
-                                미수금 : <input class="unconsumed" id="order_outstanding_amount" name="order_outstanding_amount">
+                                최초미수금 : <input class="unconsumed" id="order_outstanding_amount" name="order_outstanding_amount">
                             </td>
                             <td>
                                 수금상태 : <span class="status" name="order_adjustment_state"></span>

@@ -107,7 +107,6 @@ function quick_input_add() {
 
 function quick_input_set() {
 	quick_input_add();
-	
 }
 
 // submit  서버와 통신하는 펑션들
@@ -189,12 +188,17 @@ function detail_calc() {
 	total_price = Number('0');
 	for(i=0;i<total.length;i++) {
 		total_price = total_price + Number(de_commas($(total[i]).text()));
-
 		}
 	
 	collect = de_commas($('#detail_table .collect').val());
+	if (collect==0) {
+		$('#detail_table .collect').val(0);
+	}
 	deduct = de_commas($('#detail_table .deduct').val());
-		
+	if (deduct==0) {
+		$('#detail_table .deduct').val(0);
+	}
+
 	$('#detail_table .amount').val(commas(total_price));
 	
 	current_unconsumed = total_price - collect - deduct;
@@ -245,8 +249,26 @@ function detail_open(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 		var item_no = $(item_list[i]).attr('data-itemcode');
 		var item_grade = $(item_list[i]).attr('data-itemgrade');
 		var item_unit = $(item_list[i]).attr('data-itemunit');
+		var i_reverse = item_list.length - i;
 
-		$('#item_list_table').append('<tr><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td data-override="'+item_no+'">'+item_data[0]+'</td><td data-override="'+item_grade+'">'+item_data[1]+'</td><td data-override="'+item_unit+'">'+item_data[2]+'</td><td>'+commas(item_data[3])+'</td><td>'+commas(item_data[4])+'</td><td class="item_total">'+commas(item_data[5])+'</td></tr>');
+		$('#item_list_table').append('<tr data-numb="'+ i_reverse +'"><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="sub_row'+i_reverse+'"><input type="checkbox" id="sub_row'+ i_reverse +'" class="mdl-checkbox__input" /></label></td><td data-override="'+item_no+'">'+item_data[0]+'</td><td data-override="'+item_grade+'">'+item_data[1]+'</td><td data-override="'+item_unit+'">'+item_data[2]+'</td><td>'+commas(item_data[3])+'</td><td>'+commas(item_data[4])+'</td><td class="item_total">'+commas(item_data[5])+'</td></tr>');
+
+		var table = document.querySelector('#sub_table');
+		var headerCheckbox = table.querySelector('thead .mdl-data-table__select input');
+		var boxes = table.querySelectorAll('tbody .mdl-data-table__select');
+		var headerCheckHandler = function(event) {
+			if (event.target.checked) {
+				for (var i = 0, length = boxes.length; i < length; i++) {
+					boxes[i].MaterialCheckbox.check();
+				}
+			} else {
+				for (var i = 0, length = boxes.length; i < length; i++) {
+					boxes[i].MaterialCheckbox.uncheck();
+				}
+			}
+		};
+		headerCheckbox.addEventListener('change', headerCheckHandler);
+		componentHandler.upgradeDom();
 	}
 	
 
@@ -406,9 +428,38 @@ function enterKeySubmit(e) {
     	 	var price = $('#product_price input').val();
     	 	var quantity = $('#product_quantity input').val();
     	 	var amount = $('#product_amount input').val();
-			 $('#item_table > tbody:first').prepend('<tr><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td data-override="'+code_code+'">'+code+'</td><td data-override="'+grade_code+'">'+grade+'</td><td data-override="'+unit_code+'">'+unit+'</td><td>'+commas(price)+'</td><td>'+quantity+'</td><td class="item_total">'+commas(amount)+'</td></tr>');
+			 var i_reverse = $('#item_list_table').find('tr:first').attr('data-numb');
+			 console.log(i_reverse);
+			 if(i_reverse == undefined) {
+
+				 i_reverse = 1;
+				 console.log(i_reverse);
+			 }
+			 else {
+				 i_reverse = Number(i_reverse) + 1;
+			 }
+
+			 // 몇번째 줄인지 확인해야
+			 $('#item_table > tbody:first').prepend('<tr data-numb="'+ i_reverse +'"><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="sub_row'+ i_reverse +'"><input type="checkbox" id="sub_row'+ i_reverse +'" class="mdl-checkbox__input" /></label></td><td data-override="'+code_code+'">'+code+'</td><td data-override="'+grade_code+'">'+grade+'</td><td data-override="'+unit_code+'">'+unit+'</td><td>'+commas(price)+'</td><td>'+quantity+'</td><td class="item_total">'+commas(amount)+'</td></tr>');
 			 input_init();  
 			 detail_calc();
+			 componentHandler.upgradeDom();
+
+			 var table = document.querySelector('#sub_table');
+			 var headerCheckbox = table.querySelector('thead .mdl-data-table__select input');
+			 var boxes = table.querySelectorAll('tbody .mdl-data-table__select');
+			 var headerCheckHandler = function(event) {
+				 if (event.target.checked) {
+					 for (var i = 0, length = boxes.length; i < length; i++) {
+						 boxes[i].MaterialCheckbox.check();
+					 }
+				 } else {
+					 for (var i = 0, length = boxes.length; i < length; i++) {
+						 boxes[i].MaterialCheckbox.uncheck();
+					 }
+				 }
+			 };
+			 headerCheckbox.addEventListener('change', headerCheckHandler);
 		  }
 }
 
@@ -610,7 +661,28 @@ var order = {
 };
 
 $(document).ready(function() {
+	var table = document.querySelector('#order_table');
+	var headerCheckbox = table.querySelector('thead .mdl-data-table__select input');
+	var boxes = table.querySelectorAll('tbody .mdl-data-table__select');
+	var headerCheckHandler = function(event) {
+		if (event.target.checked) {
+			for (var i = 0, length = boxes.length; i < length; i++) {
+				boxes[i].MaterialCheckbox.check();
+			}
+		} else {
+			for (var i = 0, length = boxes.length; i < length; i++) {
+				boxes[i].MaterialCheckbox.uncheck();
+			}
+		}
+	};
+	headerCheckbox.addEventListener('change', headerCheckHandler);
+
 	page_init.init();
+
+	$('#sub_remove').on("click", function() {
+		$('tbody .is-checked').parent().parent().remove();
+		console.log('remove!');
+	});
 
 	$('.quick_code_set').on("click", function() {
 		quick_input_set();
@@ -726,6 +798,8 @@ $(document).ready(function() {
     
 // new order
     $('#new_order').on("click", function() { // 새발주
+		var data_numb = Number($('#order_table_tbody tr:first').attr('data-numb')) + 1;
+
     	if($(this).hasClass('progress')) {
 	    	alert('하던거나 마저 입력하삼');	
     	}
@@ -733,7 +807,7 @@ $(document).ready(function() {
     	detail_close();
     	$(this).addClass('progress');
     	$('#new_order').html('입력중<span>.</span><span>.</span><span>.</span>');
-        $('#order_table > tbody:first').prepend('<tr class="order_list table_highlight" id="order_"><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded" data-upgraded=",MaterialCheckbox,MaterialRipple"><input type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__focus-helper"></span><span class="mdl-checkbox__box-outline"><span class="mdl-checkbox__tick-outline"></span></span><span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple"><span class="mdl-ripple"></span></span></label></td><td class="date"></td><td class="code"></td><td class="kind"></td><td class="amount"></td><td class="collect"></td><td class="deduct"></td><td class="unconsumed"></td><td class="note last_column"></td></tr>');
+        $('#order_table > tbody:first').prepend('<tr data-role="order" data-numb="'+ data_numb +'" class="order_list table_highlight" id="order_"><td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events" for="row['+ data_numb +']"><input id="row['+ data_numb +']"type="checkbox" class="mdl-checkbox__input"></label></td><td class="date"></td><td class="code"></td><td class="kind"></td><td class="amount"></td><td class="collect"></td><td class="deduct"></td><td class="unconsumed"></td><td class="note last_column"></td></tr>');
         detail_new();
 		$('.order_progress').show();        
 // 		input_init();
@@ -741,6 +815,25 @@ $(document).ready(function() {
 // 		$('.today').val(today);
 		$('.today').attr('placeholder', today);
         order.fold();
+
+			componentHandler.upgradeDom();
+
+
+			var table = document.querySelector('#main_table');
+			var headerCheckbox = table.querySelector('thead .mdl-data-table__select input');
+			var boxes = table.querySelectorAll('tbody .mdl-data-table__select');
+			var headerCheckHandler = function(event) {
+				if (event.target.checked) {
+					for (var i = 0, length = boxes.length; i < length; i++) {
+						boxes[i].MaterialCheckbox.check();
+					}
+				} else {
+					for (var i = 0, length = boxes.length; i < length; i++) {
+						boxes[i].MaterialCheckbox.uncheck();
+					}
+				}
+			};
+			headerCheckbox.addEventListener('change', headerCheckHandler);
         
         
         setTimeout(function() {
@@ -786,7 +879,9 @@ $(document).ready(function() {
 	  		detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
 			$('.order_progress').hide();
 			order.status = "fold";
-			
+
+
+
 			
 			// if (confirm('세이브 하시면 후회하실텐데, 그래도 세이브 하시겠어요?')) {
 			// 	alert('세이브 되었습니다.');
