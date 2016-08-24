@@ -12,6 +12,7 @@ class Store(models.Model):
 	store_description = models.CharField(max_length=200,default=0)
 	def __unicode__(self):
 		return 'Store: ' + self.store_name 
+
 	def save(self): 
 		max_code_number=Store.objects.all().aggregate(Max('store_code'))
 		self.store_code=max_code_number+1
@@ -84,7 +85,7 @@ class Order(models.Model):
 	order_outstanding_amount = models.IntegerField(default=0) # nonpaid
 	order_notes = models.CharField(max_length=200,default=0)
 	order_adjustment_id= models.IntegerField(default=0)
-	order_adjustment_state = models.CharField(max_length=20,default=0)
+	order_adjustment_state = models.CharField(max_length=20,default=0) #complete , incomplete
 	order_adjustment_type = models.CharField(max_length=20,default=0)
 	order_adjustment_date = models.DateTimeField('date adjusted',default=datetime.now())
 	def __unicode__(self):

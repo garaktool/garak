@@ -87,8 +87,8 @@
                     </label>
                 </td>
                 <td data-role="value" class="date">{{ order_list.order_date|date:"Y-m-d" }}</td>
-                <td data-role="value" class="code">{{ order_list.order_store.sotre_name}}</td>
-                <td data-role="value" class="kind">{{ order_list.order_item_set.count }}</td>
+                <td data-role="value" class="code">{{ order_list.order_store.store_name}} </td>
+                <td data-role="value" class="kind">{{ order_list.ordered_item_set.count }}</td>
                 <td data-role="value" class="amount">{{ order_list.order_total_amount|intcomma }}</td>
                 <td data-role="value" class="collect">{{ order_list.order_paid_amount|intcomma }}</td>
                 <td data-role="value" class="deduct">{{ order_list.order_discounted_amount|intcomma }}</td>
