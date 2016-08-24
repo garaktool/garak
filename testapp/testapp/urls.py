@@ -15,6 +15,7 @@ urlpatterns = [
 	url(r'^order$', views.order, name='order'),
 	url(r'^home$', views.home, name='home'),
 	url(r'^submit_order$', views.submit_order, name='submit_order'),
+	url(r'^submit_page$', views.submit_page, name='submit_page'),
 	url(r'^item_control$', subpage_views.item_control, name='item_control'),
 	url(r'^grade_control$', subpage_views.grade_control, name='grade_control'),
 	url(r'^unit_control$', subpage_views.unit_control, name='unit_control'),
