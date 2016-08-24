@@ -5,7 +5,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import generic
-from django.db.models import Max
+from django.db.models import Max, Q, Sum
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.db import transaction
@@ -52,7 +52,7 @@ def home(request):
 		# order_info=Order.objects.all().filter(order_store__store_name__contains='서울')
 		order_info = Order.objects.all()
 		if request.GET.get('search_store', False):
-			order_info = order_info.filter(order_store__store_name__contains=request.GET['search_store'])
+			order_info = order_info.filter(Q(order_store__store_name__contains=request.GET['search_store']) | Q(order_store__store_code__contains=request.GET['search_store']) )
 
 		if request.GET.get('datepicker_start', False):
 			order_info = order_info.filter(order_date__range=(request.GET['datepicker_start'], datetime.date.today()))
@@ -63,54 +63,33 @@ def home(request):
 			end_date = date_object + datetime.timedelta(days=1)
 			order_info = order_info.filter(order_date__range=('1920-01-01', end_date))
 
+
+		if request.GET.get('orderby', False)=='total_amount':
+			order_info = order_info.order_by('-order_total_amount')
+		elif request.GET.get('orderby', False)=='outstanding' :
+			order_info = order_info.order_by('-order_outstanding_amount')
+
 		global_value['store_list'] = Store.objects.order_by("store_code")
 		global_value['item_list'] = Item.objects.order_by("item_code")
 		global_value['unit_list'] = Unit.objects.order_by("unit_code")
 		global_value['grade_list'] = Grade.objects.order_by("grade_code")
 		global_value['page'] = 1
 
+		#order_info_total_outstanding=order_info.filter(order_adjustment_state = 'complete').aggregate(Sum('order_outstanding_amount'))
+		order_info_total_outstanding = order_info.aggregate(Sum('order_outstanding_amount'))
+
+		global_value['total_outstanding'] = order_info_total_outstanding['order_outstanding_amount__sum']
+
+		order_info = tuple(order_info)
 		paginator = Paginator(order_info, 20)
 		page_result = paginator.page(1)
+
+
 	# print order_info[0]
 	except Order.DoesNotExist:
 		raise Http404("Order does not exist")
 
 	return render(request, 'testapp/home.html', {'order_info': page_result, 'global_value': global_value})
-
-
-def submit_page(request):
-	order_info = []
-	global_value = {}
-	from_data = json.loads(request.body)
-	order_info = Order.objects.all()
-	if from_data.get('search_store', False):
-		order_info = order_info.filter(order_store__store_name__contains=from_data['search_store'])
-
-	if from_data.get('datepicker_start', False):
-		order_info = order_info.filter(order_date__range=(from_data['datepicker_start'], datetime.date.today()))
-
-	if from_data.get('datepicker_end', False):
-		date_object = datetime.datetime.strptime(from_data['datepicker_end'], '%Y-%m-%d')
-		end_date = date_object + datetime.timedelta(days=1)
-		order_info = order_info.filter(order_date__range=('1920-01-01', end_date))
-
-
-	response_data['page'] = from_data['page'] +1
-	paginator = Paginator(order_info, 20)
-	order_info = paginator.page(response_data['page'])
-	response_data['order_info'] = order_info
-
-	if paginator.count > response_data['page'] :
-		response_data['next_page'] = true
-	else :
-		response_data['next_page'] = false
-
-	response_data['max_page'] =paginator.count
-
-	return HttpResponse(
-		json.dumps(response_data),
-		content_type="application/json"
-	)
 
 
 # order page
@@ -141,19 +120,24 @@ def submit_order(request):
 	order_data = json.loads(request.body)
 	if request.method == 'POST':
 		if order_data['order_pk']:
-
 			result_query_order = update_order(order_data)
 		else:
 			result_query_order = insert_order(order_data)
 
-		if order_data.get('ordered_item_list', False) and result_query_order['message'] == "success":
-
-			result_query_order_item = ordered_item_add(order_data['ordered_item_list'], result_query_order['data'])
-			response_data['result'] = result_query_order_item['message']
+		if result_query_order['message'] == "success":
+			if order_data.get('ordered_item_list', False) :
+				result_query_order_item = ordered_item_add(order_data['ordered_item_list'], result_query_order['data'])
+				response_data['result'] = result_query_order_item['message']
+			else :
+				try:
+					Ordered_item.objects.filter(ordered_item_order=order_data.order_id).delete()
+				except:
+					response_data['result']="success"
+					pass
 		elif result_query_order['message'] != "success":
 			response_data['result'] = result_query_order['message']
 		else:
-			response_data['result'] = 'No Item list'
+			response_data['result'] = 'Item list update error'
 
 		return HttpResponse(
 			json.dumps(response_data),
