@@ -699,6 +699,10 @@ $(document).ready(function() {
 	$('#detail_table input').on("focusout", function() {
 		$(this).val(''+commas($(this).val()));
 	});
+
+	$('#input_section autocomplete').on("focusout", function() {
+		console.log('a');
+	});
 	
 	$('input').on("focusin", function() {
 		$(this).addClass('focus');
@@ -706,6 +710,17 @@ $(document).ready(function() {
 
 	$('input').on("focusout", function() {
 		$(this).removeClass('focus');
+	});
+
+	$('#item_table input').on("focusout", function() {
+		detail_calc();
+		price = $('#product_price_input').val();
+
+		quantity = $('#product_quantity_input').val();
+
+		amount = price * quantity;
+
+		$('#product_amount_input').val(amount);
 	});
 
 
