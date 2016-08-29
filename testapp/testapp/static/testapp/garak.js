@@ -3,6 +3,11 @@
 width = $(window).width();
 height = $(window).height();
 
+today = new Date();
+year = today.getFullYear();
+month = today.getMonth() + 1;
+day = today.getDate();
+
 // global function
 
 function current_tab(href) { // 탭 이동할 때 마다 실행되는 스크립트
@@ -111,6 +116,38 @@ function quick_input_set() {
 
 // submit  서버와 통신하는 펑션들
 
+function outstanding_calc() {
+	$.ajax({
+		url: '/submit_store',
+		cache: false,
+		method: "POST",
+		data:JSON.stringify({
+			store_code : 1,
+		}),
+
+
+		csrfmiddlewaretoken: '{{ csrf_token }}'
+	})
+		.done(function(msg) {
+			//No Item list : order item 이 하나도 지adsfasdf정 안되었을경우 return값, order는 update된다.
+			//Product DoesNotExist : 등록시도하는 상품 없음,
+			//SomeError : 알수 없는 에러 발생,  refresh or db로 부터 다시 data를 읽어와서 data정합성을 맞춘다.
+			//Order DoesNotExist : 잘못된 order id가 넘어옴.
+
+			//msg.total_outstanding_amount1  => 정정당당 현재까지 미수금
+			//msg.total_outstanding_amount2  => 현재까지 전체 미수금
+
+			console.log("Data Saved : " + msg.result);
+		})
+		.fail(function() {
+			noti.show("alert","전송오류","전송이 실패했습니다. 같은 문제가 반복적으로 발생될 경우 고객센터로 문의바랍니다.");
+			// location.reload(true);
+			setTimeout(function () {
+				// window.location.reload(true);
+			},5000);
+		})
+}
+
 function detail_submit() {
 	console.log('a');
 	frm = $('#sub_table_form');
@@ -169,10 +206,10 @@ function detail_submit() {
 		//msg.total_outstanding_amount1  => 정정당당 현재까지 미수금
 		//msg.total_outstanding_amount2  => 현재까지 전체 미수금
 
-        alert("Data Saved : " + msg.result);
+        console.log("Data Saved : " + msg.result);
     })
     .fail(function() {
-        noti.show("confirm","전송오류","전송이 실패했습니다. 같은 문제가 반복적으로 발생될 경우 고객센터로 문의바랍니다.");
+        noti.show("alert","전송오류","전송이 실패했습니다. 같은 문제가 반복적으로 발생될 경우 고객센터로 문의바랍니다.");
 		// location.reload(true);
 		setTimeout(function () {
 			// window.location.reload(true);
@@ -295,6 +332,7 @@ function detail_open(date,code,kind,amount,collect,deduct,unconsumed,note, statu
 $(document).on("click", ".add_item", function() {
 	var add_id = $(this).parent().attr('id');
 
+
 	switch (add_id) {
 		case 'ui-id-1' :
 			console.log('id는 1');
@@ -303,7 +341,8 @@ $(document).on("click", ".add_item", function() {
 			console.log('id는 2');
 			break;
 		case 'ui-id-3' : //품목추가
-			popup.show('item_control');
+			var value = $("#product_code_input").val();
+			popup.show('item_control', value);
 			break;
 		case 'ui-id-4' :
 			console.log('id는 4');
@@ -473,6 +512,63 @@ $('.overlay').on('click', function() {
     console.log('omg');
 });
 
+var searching = {
+	status : "init",
+	today : year+"-"+month+"-"+day,
+	start : "",
+	end : "",
+	store: "",
+
+	init: function() {
+
+	},
+
+	set: function() {
+		searching.start = $('#datepicker_start').val();
+		searching.end = $('#datepicker_end').val();
+		searching.store = $('#store').val();
+	},
+
+	submit: function() {
+
+
+		$.ajax({
+			url: '/submit_page',
+			cache: false,
+			method: "GET",
+			data:JSON.stringify({
+				datepicker_start : searching.start,
+				datepicker_end : searching.end,
+				search_store : searching.store,
+				page: 1,
+			}),
+
+
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		})
+			.done(function(msg) {
+				//No Item list : order item 이 하나도 지adsfasdf정 안되었을경우 return값, order는 update된다.
+				//Product DoesNotExist : 등록시도하는 상품 없음,
+				//SomeError : 알수 없는 에러 발생,  refresh or db로 부터 다시 data를 읽어와서 data정합성을 맞춘다.
+				//Order DoesNotExist : 잘못된 order id가 넘어옴.
+
+				//msg.total_outstanding_amount1  => 정정당당 현재까지 미수금
+				//msg.total_outstanding_amount2  => 현재까지 전체 미수금
+
+				console.log("Data Saved : " + msg.result);
+			})
+			.fail(function() {
+				noti.show("alert","전송오류","전송이 실패했습니다. 같은 문제가 반복적으로 발생될 경우 고객센터로 문의바랍니다.");
+				// location.reload(true);
+				setTimeout(function () {
+					// window.location.reload(true);
+				},5000);
+			})
+	},
+
+}
+
+
 
 var page_init = {
 	status : "failed",
@@ -500,6 +596,23 @@ var add = {
 
 }
 
+var top_noti = {
+	status : "off",
+
+	init : function() {
+	},
+
+	show: function(type, msg) {
+		$('.top_noti').attr('style', 'height:50px;');
+		$('.top_noti').text(msg);
+	},
+
+	hide: function() {
+		$('.top_noti').attr('style','height : 0px;');
+		$('.top_noti').text('');
+	}
+}
+
 var noti = { // alert 대체
     status : "off",
     overlay : document.getElementsByClassName('overlay'),
@@ -513,9 +626,10 @@ var noti = { // alert 대체
         $(noti.overlay).css('opacity', '0.7');
         $(noti.overlay).css('z-index', '999');
         $(noti.window).css('opacity', '1');
+		$(noti.window).css('z-index', '9999');
 
 		switch(type) {
-			case alert:
+			case 'alert':
 				$('.noti .title').text(title);
 				$('.noti .msg .text').text(msg);
 				$('.noti .action').find('.'+type).addClass('noti_show');
@@ -546,7 +660,8 @@ var noti = { // alert 대체
         $(noti.overlay).css('opacity', '0');
         $(noti.overlay).css('z-index', '0');
         $('.noti .action').find('.noti_show').removeClass('noti_show');
-        $(noti.window).css('opacity', '0');        
+        $(noti.window).css('opacity', '0');
+		$(noti.window).css('z-index', '0');
     }
 };
 
@@ -560,10 +675,13 @@ var popup = {
 
 	},
 
-	show: function(url, v) {
+	show: function(url, value) {
+		popup.status = "on";
 		$(popup.overlay).css('opacity', '0.7');
 		$(popup.overlay).css('z-index', '999');
 		$(popup.window).css('opacity', '1');
+		$(popup.window).css('z-index', '9999');
+		console.log(value);
 
 		switch(url) {
 			case alert:
@@ -581,7 +699,7 @@ var popup = {
 						// alert("Data Loaded : " + msg);
 						$('.popup .msg').html(data);
 						// $('.popup .action').find('.save').addClass('popup_show');
-
+						$('.default_value').val(value);
 
 					})
 					.fail(function() {
@@ -592,10 +710,13 @@ var popup = {
 	},
 
 	hide: function() {
+		popup.status = "off";
 		$(popup.overlay).css('opacity', '0');
 		$(popup.overlay).css('z-index', '0');
 		$('.popup .action').find('.popup_show').removeClass('popup_show');
 		$(popup.window).css('opacity', '0');
+		$(popup.window).css('z-index', '0');
+		$('.popup .msg').html("");
 	}
 };
 
@@ -700,8 +821,41 @@ $(document).ready(function() {
 		$(this).val(''+commas($(this).val()));
 	});
 
-	$('#input_section autocomplete').on("focusout", function() {
-		console.log('a');
+	$('.input_section .autocomplete').on("focusout", function() {
+		if(popup.status == 'off') {
+			var value = $(this).val();
+			var data = $(this).attr('data-auto');
+			var ele = $('#' + data).find('li');
+			var length = $(ele).length;
+
+			var equal = true;
+
+			for (i = 0; i < length; i++) {
+				console.log(value);
+				if (value == $(ele[i]).text()) {
+					equal = true;
+					top_noti.hide();
+					return;
+				}
+				else {
+					if (value.length > 0) {
+						equal = false;
+					}
+
+				}
+			}
+
+			if (equal == false) {
+				top_noti.show('error', '존재하지 않는 값입니다.');
+				setTimeout(function () {
+					top_noti.hide();
+				}, 3000);
+
+				$(this).focus();
+				$(this).val('');
+
+			}
+		}
 	});
 	
 	$('input').on("focusin", function() {
@@ -709,10 +863,15 @@ $(document).ready(function() {
 	});
 
 	$('input').on("focusout", function() {
-		$(this).removeClass('focus');
+		if(popup.status == 'off') {
+			$(this).removeClass('focus');
+		}
+		else {
+
+		}
 	});
 
-	$('#item_table input').on("focusout", function() {
+	$('.input_section .column').on("focusout", function() {
 		detail_calc();
 		price = $('#product_price_input').val();
 
@@ -720,7 +879,9 @@ $(document).ready(function() {
 
 		amount = price * quantity;
 
+		if(amount != 0 ) {
 		$('#product_amount_input').val(amount);
+		}
 	});
 
 
@@ -731,7 +892,9 @@ $(document).ready(function() {
 
 		amount = price * quantity;
 
-		$('#product_amount_input').val(amount);
+		if(amount != 0 ) {
+			$('#product_amount_input').val(amount);
+		}
 	});
 
 // user menu
@@ -890,11 +1053,31 @@ $(document).ready(function() {
 			unconsumed = $('#sub_table .unconsumed').val();
 			note = $('#sub_table .note').val();
 			status = $('#sub_table .status').text();
+	  		input = $('.input_section input');
+	  console.log(input.length);
+	  		var input_empty = true;
+	  		for(i=0;i<input.length;i++) {
+				console.log(i);
+				if ($(input[i]).val() != '') {
+						input_empty = false;
+					console.log('!!!!');
+					}
+			}
 
+
+			if(input_empty == false) {
+				top_noti.show('error', '존재하지 않는 값입니다.2');
+				setTimeout(function() {
+					top_noti.hide();
+				}, 3000);
+
+
+			}
+	  else {
 	  		detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
 			$('.order_progress').hide();
 			order.status = "fold";
-
+			}
 
 
 			
@@ -961,9 +1144,24 @@ $(document).ready(function() {
 	   $('.calculate_progress').hide(); 
     });
 
+	$('#item_control_confirm').on("click", function(e) {
+		e.preventDefault();
+		alert('shit');
+		console.log('confirm');
+	});
 
-    
-    
-    
+	$('#item_control_cancel').on("click", function(e) {
+		e.preventDefault();
+	});
+
+	$('#searching').on("click", function(e) {
+		e.preventDefault();
+		searching.set();
+		searching.submit();
+	})
+
+
+
+
 });
 
