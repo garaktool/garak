@@ -174,6 +174,8 @@
             </head>
 
 <body>
+<div class="top_noti">
+</div>
 <div class="overlay"></div>
 <div class="noti">
     <div class="title">
@@ -182,16 +184,16 @@
         <span class="text"></span>
         <div class="action">
             <div class="confirm">
-                확인1
+                확인
             </div>
             <div class="question">
             </div>
             <div class="input">
             </div>
-            <div class="save">
-                <div>저장</div>
-                <div>취소</div>
-            </div>
+            <!--<div class="save">-->
+                <!--<div>저장</div>-->
+                <!--<div>취소</div>-->
+            <!--</div>-->
         </div>
     </div>
 </div>
@@ -257,7 +259,7 @@
                       </div>
                       <div class="mdl-card__actions mdl-card--border">
                           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                              37,652,000
+                              {{ global_value.total_outstanding|intcomma }}
                           </a>
                       </div>
                   </div>
