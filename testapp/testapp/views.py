@@ -11,12 +11,24 @@ from django.utils import timezone
 from django.db import transaction
 import datetime, time
 from django.core.paginator import Paginator
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from serializers import UserSerializer, GroupSerializer
 
 from datetime import timedelta
 import sys, traceback
 
 from .models import Item, Order, Ordered_item, Store, Grade, Unit
 import json
+
+# ViewSets define the view behavior.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 
 # 한글테스트
@@ -126,13 +138,15 @@ def submit_order(request):
 
 		if result_query_order['message'] == "success":
 			if order_data.get('ordered_item_list', False) :
+
 				result_query_order_item = ordered_item_add(order_data['ordered_item_list'], result_query_order['data'])
 				response_data['result'] = result_query_order_item['message']
 			else :
+				response_data['result'] = "success"
 				try:
-					Ordered_item.objects.filter(ordered_item_order=order_data.order_id).delete()
+					Ordered_item.objects.filter(ordered_item_order=order_data['order_pk']).delete()
 				except:
-					response_data['result']="success"
+					response_data['result'] = "error no item list delete"
 					pass
 		elif result_query_order['message'] != "success":
 			response_data['result'] = result_query_order['message']
