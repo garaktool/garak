@@ -2,6 +2,49 @@
 width = $(window).width();
 height = $(window).height();
 
+<<<<<<< HEAD
+=======
+today = new Date();
+year = today.getFullYear();
+month = today.getMonth() + 1;
+day = today.getDate();
+
+// global function
+
+function current_tab(href) { // 탭 이동할 때 마다 실행되는 스크립트
+	var tab_id = href.slice('-1');
+
+	switch (tab_id) {
+		case '1':
+			board.show();
+			break;
+		case '2':
+			board.show();
+			break;
+		case '3':
+			board.hide();
+			break;
+		default:
+			console.log('default');
+	}
+}
+
+function load(target, url) {  // target = HTML DOM, url에서 로딩된걸 집어넣음
+	$.ajax({
+		url: url,
+		cache: false,
+		method: "GET"
+	})
+		.done(function(data) {
+			// alert("Data Loaded : " + msg);
+			$(target).html(data);
+
+		})
+		.fail(function() {
+			alert("failed");
+		});
+}
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 
 // global functions
 function commas_checker(x) {
@@ -309,7 +352,10 @@ function detail_submit() {
 		//msg.total_outstanding_amount2  => 현재까지 전체 미수금
 
         console.log("Data Saved : " + msg.result);
+<<<<<<< HEAD
 		draft.init();
+=======
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
     })
     .fail(function() {
         noti.show("alert","전송오류","전송이 실패했습니다. 같은 문제가 반복적으로 발생될 경우 고객센터로 문의바랍니다.");
@@ -461,6 +507,31 @@ $(document).on("click", ".add_item", function() {
 	draft.check(3);
 
 
+<<<<<<< HEAD
+=======
+
+	switch (add_id) {
+		case 'ui-id-1' :
+			console.log('id는 1');
+			break;
+		case 'ui-id-2' :
+			console.log('id는 2');
+			break;
+		case 'ui-id-3' : //품목추가
+			var value = $("#product_code_input").val();
+			popup.show('item_control', value);
+			break;
+		case 'ui-id-4' :
+			console.log('id는 4');
+			break;
+		case 'ui-id-5' :
+			console.log('id는 5');
+			break;
+		case 'ui-id-6' :
+			console.log('id는 6');
+			break;
+	}
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 
 });
 
@@ -619,6 +690,7 @@ $('.overlay').on('click', function() {
     console.log('omg');
 });
 
+<<<<<<< HEAD
 var draft = {
 	init: function() {
 		$('[data-status="draft"]').attr('data-status', 'saved');
@@ -687,6 +759,8 @@ $(function() {
 	date_setting.init();
 })
 
+=======
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 var searching = {
 	status : "init",
 	today : year+"-"+month+"-"+day,
@@ -705,6 +779,7 @@ var searching = {
 	},
 
 	submit: function() {
+<<<<<<< HEAD
 		location.href = "/home?datepicker_start="+searching.start+"&datepicker_end="+searching.end+"&search_store="+searching.store+"&page=1";
 	},
 
@@ -713,6 +788,12 @@ var searching = {
 
 		$.ajax({
 			url: '/home',
+=======
+
+
+		$.ajax({
+			url: '/submit_page',
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 			cache: false,
 			method: "GET",
 			data:JSON.stringify({
@@ -807,9 +888,36 @@ var noti = { // alert 대체
         $(noti.window).css('opacity', '1');
 		$(noti.window).css('z-index', '9999');
 
+<<<<<<< HEAD
 		$('.noti .title').text(title);
 		$('.noti .msg .text').text(msg);
 		$('.noti .action').find('.'+type).addClass('noti_show');
+=======
+		switch(type) {
+			case 'alert':
+				$('.noti .title').text(title);
+				$('.noti .msg .text').text(msg);
+				$('.noti .action').find('.'+type).addClass('noti_show');
+				break;
+
+			default:
+				$.ajax({
+					url: type,
+					cache: false,
+					method: "GET"
+				})
+					.done(function(data) {
+						// alert("Data Loaded : " + msg);
+						$('.noti .title').text(title);
+						$('.noti .msg .text').html(data);
+						$('.noti .action').find('.save').addClass('noti_show');
+
+
+					})
+					.fail(function() {
+						alert("failed");
+					});
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 
     },
     
@@ -1005,7 +1113,10 @@ $(document).ready(function() {
 			}
 
 			if (equal == false) {
+<<<<<<< HEAD
 				if (page_willing > 0)
+=======
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 				top_noti.show('error', '존재하지 않는 값입니다.');
 				setTimeout(function () {
 					top_noti.hide();
@@ -1204,7 +1315,56 @@ $(document).ready(function() {
   
   $('#detail_confirm').on("click", function(e) {
 	  		e.preventDefault();
+<<<<<<< HEAD
 	  detail_confirm();
+=======
+	        date = $('#sub_table .date').val();
+            code = $('#sub_table .code').val();
+			kind = $('#item_table tr').length - 2;
+			amount = $('#sub_table .amount').val();
+			collect = $('#sub_table .collect').val();
+			deduct = $('#sub_table .deduct').val();
+			unconsumed = $('#sub_table .unconsumed').val();
+			note = $('#sub_table .note').val();
+			status = $('#sub_table .status').text();
+	  		input = $('.input_section input');
+	  console.log(input.length);
+	  		var input_empty = true;
+	  		for(i=0;i<input.length;i++) {
+				console.log(i);
+				if ($(input[i]).val() != '') {
+						input_empty = false;
+					console.log('!!!!');
+					}
+			}
+
+
+			if(input_empty == false) {
+				top_noti.show('error', '존재하지 않는 값입니다.2');
+				setTimeout(function() {
+					top_noti.hide();
+				}, 3000);
+
+
+			}
+	  else {
+	  		detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
+			$('.order_progress').hide();
+			order.status = "fold";
+			}
+
+
+			
+			// if (confirm('세이브 하시면 후회하실텐데, 그래도 세이브 하시겠어요?')) {
+			// 	alert('세이브 되었습니다.');
+			// 	detail_save(date,code,kind,amount,collect,deduct,unconsumed,note, status);
+			// 	$('.order_progress').hide();
+			// 	order_button_reset();
+			// 	order.status = "fold";
+			// } else {
+			// 	alert('취소했지만 세이브 되었습니다.');
+			// }
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 
   });
 
@@ -1259,7 +1419,26 @@ $(document).ready(function() {
 	   $('.calculate_progress').hide(); 
     });
 
+	$('#item_control_confirm').on("click", function(e) {
+		e.preventDefault();
+		alert('shit');
+		console.log('confirm');
+	});
 
+	$('#item_control_cancel').on("click", function(e) {
+		e.preventDefault();
+	});
+
+	$('#searching').on("click", function(e) {
+		e.preventDefault();
+		searching.set();
+		searching.submit();
+	})
+
+
+
+
+<<<<<<< HEAD
 	$('#searching').on("click", function(e) {
 		e.preventDefault();
 		searching.set();
@@ -1305,5 +1484,7 @@ $(document).ready(function() {
 	// 	confirm("저장하지 않은 내용이 있습니다.");
 	// 	return "감사합니다.";
 	// };
+=======
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 });
 

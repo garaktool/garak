@@ -117,8 +117,14 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
+<<<<<<< HEAD
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGINATE_BY': 10
+=======
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 }
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

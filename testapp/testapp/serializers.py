@@ -37,12 +37,12 @@ class Ordered_itemSerializer(serializers.HyperlinkedModelSerializer) :
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer) :
     order_store = StoreSerializer()
-    ordered_item_set=Ordered_itemSerializer()
-    #ordered_item_set = serializers.HyperlinkedIdentityField(view_name='ordered_item-list')
+    ordered_item_list=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    #Ordered_itemSerializer()
 
     class Meta:
         model = Order
-        fields = ('order_notes','order_store','ordered_item_set',)
+        fields = ('order_notes','order_store','ordered_item_list',)
         #fields = '__all__'
 
 

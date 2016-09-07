@@ -34,7 +34,11 @@ def item_control(request):
 			except Unit.DoesNotExist:
 				result['message'] = 'Unit DoesNotExist'
 			
+<<<<<<< HEAD
 			except Exception as e:
+=======
+			except Exception as e:# error �߻��� 
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 				result['message'] = 'item_update_error'
 				print "#########" + e.message
 			
@@ -58,7 +62,11 @@ def item_control(request):
 			except Unit.DoesNotExist:
 				result['message'] = 'Unit DoesNotExist'
 				
+<<<<<<< HEAD
 			except Exception as e:
+=======
+			except Exception as e:# error �߻��� 
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 				result['message'] = 'item_insert_error' + e.message
 				print "@#@#@#@#" + e.message
 				
@@ -74,10 +82,16 @@ def item_control(request):
 			# Generates a "SELECT MAX..." statement
 			suggest_item_code=Item.objects.all().aggregate(Max('item_code'))
 			suggest_item_code = suggest_item_code['item_code__max']+1
+<<<<<<< HEAD
 			item_info = Item.objects.all()
 
 	
 	context = {'item_info': item_info, 'suggest_item_code':suggest_item_code,'result':result['message']}
+=======
+			item_info={'item_code':suggest_item_code}
+	
+	context = {'item_info': item_info, 'result':result['message']}
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 	return render(request, 'testapp/item_control.html', context)
 
 def grade_control(request):

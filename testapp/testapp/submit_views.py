@@ -10,7 +10,10 @@ from django.utils import timezone
 from django.db import transaction
 import datetime, time
 from django.core.paginator import Paginator
+<<<<<<< HEAD
 from common_func import getInfo
+=======
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 
 from datetime import timedelta
 import sys, traceback
@@ -40,6 +43,7 @@ def submit_page(request):
 	global_value = {}
 	response_data = {}
 	from_data = json.loads(request.body)
+<<<<<<< HEAD
 
 	order_info = Order.objects.all()
 	if from_data.get('search_store', False):
@@ -47,6 +51,11 @@ def submit_page(request):
 		search_store_code_string = getInfo().get_code(request.GET['search_store'])
 		search_store_code_int = int(search_store_code_string)
 		order_info = order_info.filter(order_store__store_code__contains=search_store_code_int)
+=======
+	order_info = Order.objects.all()
+	if from_data.get('search_store', False):
+		order_info = order_info.filter(order_store__store_name__contains=from_data['search_store'])
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 
 	if from_data.get('datepicker_start', False):
 		order_info = order_info.filter(order_date__range=(from_data['datepicker_start'], datetime.date.today()))

@@ -11,14 +11,22 @@ from django.utils import timezone
 from django.db import transaction
 import datetime, time
 from django.core.paginator import Paginator
+<<<<<<< HEAD
 
 from common_func import getInfo
+=======
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from serializers import UserSerializer, GroupSerializer
+
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 from datetime import timedelta
 import sys, traceback
 
 from .models import Item, Order, Ordered_item, Store, Grade, Unit
 import json
 
+<<<<<<< HEAD
 
 
 
@@ -81,6 +89,109 @@ def home(request):
         raise Http404("Order does not exist")
 
     return render(request, 'testapp/home.html', {'order_info': order_info, 'global_value': global_value})
+=======
+# ViewSets define the view behavior.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+
+# 한글테스트
+def index(request):
+	order_info = []
+	global_value = {}
+
+	try:
+		# order_info = Order.objects.get(pk=order_id)
+		# order_info = Order.objects.order_by('-order_date')[:20]
+		order_info = Order.objects.order_by('-order_date')
+		global_value['store_list'] = Store.objects.order_by("store_code")
+		global_value['item_list'] = Item.objects.order_by("item_code")
+		global_value['unit_list'] = Unit.objects.order_by("unit_code")
+		global_value['grade_list'] = Grade.objects.order_by("grade_code")
+
+	except Order.DoesNotExist:
+		raise Http404("Order does not exist")
+
+	return render(request, 'testapp/home.html', {'order_info': order_info, 'global_value': global_value})
+
+
+####################################################################
+def home(request):
+	order_info = []
+	global_value = {}
+	try:
+		# order_info = Order.objects.get(pk=order_id)
+		# order_info = Order.objects.order_by('-order_date')[:20]
+		# https://docs.djangoproject.com/ja/1.9/topics/db/queries/
+		# where clause 에 대해 잘 설명 해둠
+		# django 에 pagenation 기능이 있음 , 참고 하자
+		# order_info=Order.objects.all().filter(order_store__store_name__contains='서울')
+		order_info = Order.objects.all()
+		if request.GET.get('search_store', False):
+			order_info = order_info.filter(Q(order_store__store_name__contains=request.GET['search_store']) | Q(order_store__store_code__contains=request.GET['search_store']) )
+
+		if request.GET.get('datepicker_start', False):
+			order_info = order_info.filter(order_date__range=(request.GET['datepicker_start'], datetime.date.today()))
+
+		if request.GET.get('datepicker_end', False):
+			# end_date =request.GET['datepicker_end'] +  timedelta(days=1)
+			date_object = datetime.datetime.strptime(request.GET['datepicker_end'], '%Y-%m-%d')
+			end_date = date_object + datetime.timedelta(days=1)
+			order_info = order_info.filter(order_date__range=('1920-01-01', end_date))
+
+
+		if request.GET.get('orderby', False)=='total_amount':
+			order_info = order_info.order_by('-order_total_amount')
+		elif request.GET.get('orderby', False)=='outstanding' :
+			order_info = order_info.order_by('-order_outstanding_amount')
+
+		global_value['store_list'] = Store.objects.order_by("store_code")
+		global_value['item_list'] = Item.objects.order_by("item_code")
+		global_value['unit_list'] = Unit.objects.order_by("unit_code")
+		global_value['grade_list'] = Grade.objects.order_by("grade_code")
+		global_value['page'] = 1
+
+		#order_info_total_outstanding=order_info.filter(order_adjustment_state = 'complete').aggregate(Sum('order_outstanding_amount'))
+		order_info_total_outstanding = order_info.aggregate(Sum('order_outstanding_amount'))
+
+		global_value['total_outstanding'] = order_info_total_outstanding['order_outstanding_amount__sum']
+
+		order_info = tuple(order_info)
+		paginator = Paginator(order_info, 20)
+		page_result = paginator.page(1)
+
+
+	# print order_info[0]
+	except Order.DoesNotExist:
+		raise Http404("Order does not exist")
+
+	return render(request, 'testapp/home.html', {'order_info': page_result, 'global_value': global_value})
+
+
+# order page
+def order(request):
+	order_info = []
+	global_value = {}
+	try:
+		# order_info = Order.objects.get(pk=order_id)
+		# order_info = Order.objects.order_by('-order_date')[:20]
+		order_info = Order.objects.order_by('-order_date')
+
+		global_value['store_list'] = Store.objects.order_by("store_code")
+		global_value['item_list'] = Item.objects.order_by("item_code")
+		global_value['unit_list'] = Unit.objects.order_by("unit_code")
+		global_value['grade_list'] = Grade.objects.order_by("grade_code")
+
+	except Order.DoesNotExist:
+		raise Http404("Order does not exist")
+
+	return render(request, 'testapp/order.html', {'order_info': order_info, 'global_value': global_value})
+>>>>>>> fcc0b402eb783538a8872d700c041dcf2e64d8c0
 
 
 # order control page
