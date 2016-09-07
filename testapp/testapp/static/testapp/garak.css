@@ -13,6 +13,19 @@
 
 /** noti **/
 
+.top_noti {
+    height : 0;
+    background-color : red;
+    color : white;
+    transition: all 0.35s cubic-bezier(0.4, 0, 1, 1);
+    line-height : 50px;
+    font-size : 24px;
+    text-align : center;
+    width : 100%;
+    position : fixed;
+    z-index : 99999;
+}
+
 .noti {
     position : absolute;
     opacity : 0;
@@ -22,7 +35,12 @@
     left : 50%;
     transform: translate(-50%, -50%);
     top : 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
 
+.noti:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .noti .title {
@@ -34,6 +52,7 @@
     color : #fff;
     text-align : center;
     font-weight : bold;
+    background-color:#5AAFEE;
 }
 
 .noti .msg {
@@ -50,7 +69,13 @@
     margin-top : 20px;
 }
 
-.noti .action .confirm {
+.noti .action > div {
+    display : none;
+    margin : 0 auto;
+    text-align : center;
+}
+
+.noti .action > div > div {
     width : 40px;
     height : 30px;
     line-height : 30px;
@@ -58,11 +83,12 @@
     margin : 0 auto;
     background-color : #F5A623;
     color : #FFF;
+    display : inline-block;
 }
 
 
 .noti_show {
-    display : block;
+    display : block !important;
 }
 
 
@@ -74,7 +100,7 @@
     opacity : 0;
     z-index : 9999;
     border-radius : 15px;
-    transition: all 0.35s cubic-bezier(0.4, 0, 1, 1);
+    /*transition: all 0.35s cubic-bezier(0.4, 0, 1, 1);*/
     left : 50%;
     transform: translate(-50%, -50%);
     top : 50%;
@@ -412,6 +438,10 @@ body {
     color : #000;
 }
 
+.item_control .sub_right_wrapper {
+    top : 10px;
+}
+
 #main_table {
 	position : relative;
 }
@@ -534,6 +564,25 @@ tr:nth-child(even) {
 .input_section #product_code label {
     text-align : left;
 }
+
+.item_control #item_table td:first-child, .item_control #item_table th:first-child {
+    width : 44px !important;
+}
+
+.item_control #item_table th:nth-child(2), .item_control #item_table td:nth-child(2) {
+    width : 44px !important;
+}
+
+.item_control #item_table th:nth-child(3), .item_control #item_table td:nth-child(3) {
+    width : 100px !important;
+    text-align : left;
+}
+
+.item_control #item_table th:nth-child(4), .item_control #item_table td:nth-child(4) {
+    width : auto !important;
+    text-align : left;
+}
+
 
 #item_table td:first-child, #item_table th:first-child {
 	width : 44px;

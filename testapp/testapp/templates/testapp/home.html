@@ -50,7 +50,7 @@
                 mm='0'+mm
             } 
             
-            today = yyyy+'/'+mm+'/'+dd;
+            today = yyyy+'-'+mm+'-'+dd;
             
             </script>
             
@@ -96,33 +96,16 @@
 
                 ];
                 var product_grade_ac = [
-                    "1급(1)",
-                    "2급(2)",
-                    "3급(3)",
-                    "똥(4)",
-                    "11급(1)",
-                    "111급(1)",
-                    "1111급(1)",
-                    "11111급(1)",
-                    "111111급(1)",
-                    "12급(1)",
-                    "13급(1)",
-                    "14급(1)",
-                    "15급(1)",
-                    "16급(1)",
-                    "17급(1)",
-                    "18급(1)",
-                    "19급(1)",
-                    "10급(1)",
-                    "21급(1)",
+                {% for grade_loop in global_value.grade_list %}
+                  "{{grade_loop.grade_name}}({{grade_loop.grade_code}})",
+                  {% endfor %}
 
 
                 ];
                 var product_unit_ac = [
-                    "박스(1)",
-                    "트럭(2)",
-                    "컨테이너(3)"
-                ]
+                {% for unit_loop in global_value.unit_list %}
+                  "{{unit_loop.unit_name}}({{unit_loop.unit_code}})",
+                  {% endfor %}                ]
                 $( "#quick_code" ).autocomplete({
                   delay : 0,
                   autoFocus: true,
@@ -153,6 +136,11 @@
                   autoFocus: true,
                   source: bank
                 });
+                  $("#store").autocomplete({
+                      delay : 0,
+                      autoFocus: true,
+                      source: code_ac
+                  });
                 
               });
               
@@ -174,6 +162,8 @@
             </head>
 
 <body>
+<div class="top_noti">
+</div>
 <div class="overlay"></div>
 <div class="noti">
     <div class="title">
@@ -182,7 +172,7 @@
         <span class="text"></span>
         <div class="action">
             <div class="confirm">
-                확인1
+                <div>확인</div>
             </div>
             <div class="question">
             </div>
@@ -192,6 +182,12 @@
                 <div>저장</div>
                 <div>취소</div>
             </div>
+            <div class="draft">
+                <div class="draft_save">저장</div>
+                <div class="draft_remove">삭제</div>
+                <div class="draft_cancel">취소</div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -221,7 +217,7 @@
         <!-- Tabs -->
         <div class="garak_sub_menu mdl-layout__tab-bar mdl-js-ripple-effect">
           <a href="#scroll-tab-1" id="" class="mdl-layout__tab is-active">수주</a>
-          <a href="#scroll-tab-2" id="" class="mdl-layout__tab">미수금 관리</a>
+          <a href="#scroll-tab-2" id="" class="mdl-layout__tab">미수금</a>
           <a href="#scroll-tab-3" id="" class="mdl-layout__tab">설정</a>
           <a href="#scroll-tab-4" id="" class="mdl-layout__tab">통계</a>
         </div>
@@ -257,7 +253,7 @@
                       </div>
                       <div class="mdl-card__actions mdl-card--border">
                           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                              37,652,000
+                              {{ global_value.total_outstanding|intcomma }}
                           </a>
                       </div>
                   </div>

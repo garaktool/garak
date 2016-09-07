@@ -14,28 +14,27 @@
     <div class="garak_sub_title">
         수주 관리
     </div>
-    <div class="garak_sorting">
-        일주일  |  한달  |  전체
-    </div>
-    <div class="garak_calendar">
-        <div class="garak_calendar_start">
-            <input placeholder="2015/08/01" id="datepicker_start"></input> ~ <input placeholder="2015/08/31" id="datepicker_end"></input>
+    <form class="sub_table_form" id="sub_table_form" name="sub_table_form" method="get" target="/submit_order">
+        <div class="garak_sorting">
+            <span id="searching_week">일주일</span>  |  <span id="searching_month">한달</span>  |  <span id="searching_all">전체</span>
+        </div>
+        <div class="garak_calendar">
+            <div class="garak_calendar_start">
+                <input placeholder="{% now "Y-m-d" %}" id="datepicker_start" value="{{ global_value.datepicker_start }}"></input> ~ <input placeholder="{% now "Y-m-d" %}" id="datepicker_end" value="{{ global_value.datepicker_end }}"></input>
+            </div>
+
+            <div class="garak_calendar_end">
+                <input id="store" placeholder="거래처지정안함" value="{{ global_value.search_store }}"></input>
+                <button id="searching" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
+                    검색
+                </button>
+            </div>
 
         </div>
-
-
-        <div class="garak_calendar_end">
-            <input placeholder="거래처지정안함"></input>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect garak_btn">
-                검색
-            </button>
-
-        </div>
-
-    </div>
+    </form>
 
     <div class="garak_sorting">
-        모든내역 | 매출액순 | 미수금순 | 다른옵션
+        <a href="/">모든내역</a> | <a href="/?orderby=total_amount">매출액순</a> | <a href="/?orderby=outstanding">미수금순</a> | 다른옵션
 
     </div>
 
@@ -92,7 +91,7 @@
                 <td data-role="value" class="amount">{{ order_list.order_total_amount|intcomma }}</td>
                 <td data-role="value" class="collect">{{ order_list.order_paid_amount|intcomma }}</td>
                 <td data-role="value" class="deduct">{{ order_list.order_discounted_amount|intcomma }}</td>
-                <td data-role="value" class="unconsumed">{{ order_list.order_outstanding_amount}}</td>
+                <td data-role="value" class="unconsumed">{{ order_list.order_outstanding_amount|intcomma}}</td>
                 <td data-role="value" class="note last_column">{{ order_list.order_notes}}</td>
                 <td data-role="value" class="item_list">
                     {% for orderitem_loop in order_list.ordered_item_set.all %}
@@ -155,23 +154,23 @@
                         </tr>
                         <tr class="input_section">
                             <td></td>
-                            <td data-override=" " id="product_code" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input autocomplete" type="text" id="product_code_input" name="ordered_item_item_code" onkeypress="enterTab(event);">
+                            <td data-override=" " id="product_code" class="mdl-textfield mdl-js-textfield garak_table_input column">
+                                <input data-auto="ui-id-3" class="mdl-textfield__input autocomplete" type="text" id="product_code_input" name="ordered_item_item_code" onkeypress="enterTab(event);">
                                 <label data-override=" " class="mdl-textfield__label" for="product_code_input">품목(코드)</label>
                             </td>
-                            <td data-override=" " id="product_grade" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input autocomplete" type="text" id="product_grade_input" name="ordered_item_grade_code" onkeypress="enterTab(event);">
+                            <td data-override=" " id="product_grade" class="mdl-textfield mdl-js-textfield garak_table_input column">
+                                <input data-auto="ui-id-4" class="mdl-textfield__input autocomplete" type="text" id="product_grade_input" name="ordered_item_grade_code" onkeypress="enterTab(event);">
                                 <label class="mdl-textfield__label" for="product_grade_input">1급(1)</label>
                             </td>
-                            <td data-override=" " id="product_unit" class="mdl-textfield mdl-js-textfield garak_table_input">
-                                <input class="mdl-textfield__input autocomplete" type="text" id="product_unit_input" name="ordered_item_unit_code" onkeypress="enterTab(event);">
+                            <td data-override=" " id="product_unit" class="mdl-textfield mdl-js-textfield garak_table_input column">
+                                <input data-auto="ui-id-5" class="mdl-textfield__input autocomplete" type="text" id="product_unit_input" name="ordered_item_unit_code" onkeypress="enterTab(event);">
                                 <label class="mdl-textfield__label" for="product_unit_input">박스(1)</label>
                             </td>
-                            <td data-override=" " id="product_price" class="mdl-textfield mdl-js-textfield garak_table_input">
+                            <td data-override=" " id="product_price" class="mdl-textfield mdl-js-textfield garak_table_input column">
                                 <input class="mdl-textfield__input" type="text" id="product_price_input" name="ordered_item_unit_price" onkeypress="enterTab(event);">
                                 <label class="mdl-textfield__label" for="product_price_input">0</label>
                             </td>
-                            <td data-override=" " id="product_quantity" class="mdl-textfield mdl-js-textfield garak_table_input">
+                            <td data-override=" " id="product_quantity" class="mdl-textfield mdl-js-textfield garak_table_input column">
                                 <input class="mdl-textfield__input" type="text" id="product_quantity_input" name="ordered_item_qty" onkeypress="enterTab(event);">
                                 <label class="mdl-textfield__label" for="product_quantity_input">1</label>
                             </td>
